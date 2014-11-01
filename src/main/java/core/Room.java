@@ -13,7 +13,6 @@ public class Room {
     private String type;
     private int numrooms;
     private Map <String, Room> neighbors = new HashMap<>();
-    private final int MAX_ITEMS = 10;
 
 
     public Room(String startType){
@@ -24,6 +23,7 @@ public class Room {
     private String getDescription() {
         return getTypeDescription(type) + "There are " + numrooms + "rooms to the "
                 + neighbors.keySet().toString() + ". " + "What will you do?";
+                     // fix commas and spacing in keySet()
     }
 
     private int getNumRooms() {
@@ -31,33 +31,21 @@ public class Room {
     }
 
     private String getTypeDescription (String type) {
-        switch (type){
+        switch (type) {
             case "treasureroom":
                 return "You have...";
+                break;
             case "market":
-                return "...";
+                return "mistyroom";
+                break;
             case "etc."
-
-
+                return "...";
+                break;
         }
     }
 
     private void addRoom (String direction, Room newroom) {
-        switch (direction.toLowerCase()){
-            case "north":
-                neighbors.put("north", newroom);
-                break;
-            case "south":
-                neighbors.put("south", newroom);
-                break;
-            case "east":
-                neighbors.put("east", newroom);
-                break;
-            case "west":
-                neighbors.put("west", newroom);
-                break;
-
-        }
+        neighbors.put(direction.toLowerCase(), newroom);
         numrooms++;
     }
 
