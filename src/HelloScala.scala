@@ -3,10 +3,8 @@
  */
 
 object HelloScala extends App {
-  override def main (args: Array[String]): Unit = {
-    val helloObj = new HelloJava
-    helloObj.hello()
-  }
+  val helloObj = new HelloJava
+  helloObj.hello()
 }
 
 class HelloScala {
