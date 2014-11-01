@@ -2,8 +2,10 @@ package location;
 
 public class Terrain extends Location {
     private TerrainType type;
+    private boolean containsDungeonEntrance;
 
     public Terrain(TerrainType type) {
+        containsDungeonEntrance = false;
         this.type = type;
     }
 
@@ -17,4 +19,13 @@ public class Terrain extends Location {
             default: return "I have misplaced you.";
         }
     }
+
+    public void placeDungeonEntrance() {
+        containsDungeonEntrance = true;
+    }
+
+    public boolean containsDungeon() {
+        return containsDungeonEntrance;
+    }
+
 }
