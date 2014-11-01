@@ -1,5 +1,6 @@
 package server;
 
+import core.MessageType;
 import server.messages.*;
 
 import javax.json.Json;
@@ -20,13 +21,30 @@ public class GameDecoder implements Decoder.Text<GameMessage> {
                     case "login":
                         return new LoginMessage(obj.getString(type));
                     case "update":
-                        return new UpdateMessage(obj.getString(type));
+                        return new UpdateMessage(obj.getString(type), decodeMessageType(obj.getString("type")));
                     case "cmd":
                         return new CommandMessage(obj.getString(type));
                     case "error":
                         return new ErrorMessage(obj.getString(type));
                 }
-            } catch (NullPointerException e) {}
+            } catch (NullPointerException e) {
+            }
+        }
+        return null;
+    }
+
+    private MessageType decodeMessageType(String type) {
+        switch (type) {
+            case "Notification":
+                return MessageType.Notification;
+            case "Success":
+                return MessageType.Success;
+            case "Failure":
+                return MessageType.Failure;
+            case "Warning":
+                return MessageType.Warning;
+            case "Alert":
+                return MessageType.Alert;
         }
         return null;
     }

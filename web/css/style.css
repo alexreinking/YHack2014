@@ -110,7 +110,27 @@ html, body {
     overflow-x: hidden;
 }
 
-.log-error {
+.log-Notification {
+    color: white;
+}
+
+.log-Success {
+    color: green;
+}
+
+.log-Failure {
+    color: orange;
+}
+
+.log-Warning {
+    color: yellow;
+}
+
+.log-Alert {
+    color: red;
+}
+
+.log-fatal {
     background-color: red;
     color: black;
 }

@@ -1,15 +1,24 @@
-package core;
+package core
 
-import location.Location;
+import location.Location
 
 class Game {
   private val _locationMap =
-    scala.collection.mutable.Map.empty[Player, Location];
-  
+    scala.collection.mutable.Map.empty[Player, Location]
+
   def getCurrentLocation(player: Player): Option[Location] = {
-    _locationMap.get(player);
+    _locationMap.get(player)
   }
 
-  def killFoe(foe: Foe) { /* fill this in */ }
-  def killPlayer(player: Player) { /* fill this in */ }
+  def addPlayer(player: Player): Unit = {
+
+  }
+
+  def killFoe(foe: Foe) {
+    /* fill this in */
+  }
+
+  def killPlayer(player: Player) {
+    /* fill this in */
+  }
 }

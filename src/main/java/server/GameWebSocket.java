@@ -2,6 +2,7 @@ package server;
 
 import antlr.CommandLexer;
 import antlr.CommandParser;
+import core.MessageType;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.BufferedTokenStream;
 import server.messages.*;
@@ -15,7 +16,6 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.CopyOnWriteArraySet;
-import java.util.logging.Logger;
 
 @ServerEndpoint(value = "/game/{lobby}", decoders = GameDecoder.class, encoders = GameEncoder.class)
 public class GameWebSocket {
@@ -44,7 +44,7 @@ public class GameWebSocket {
                     }
 
                 player.getUserProperties().put("name", possibleName);
-                player.getBasicRemote().sendObject(new UpdateMessage("You have logged in as " + possibleName + "!"));
+                player.getBasicRemote().sendObject(new UpdateMessage("You have logged in as " + possibleName + "!", MessageType.Notification));
 
                 // Should add the player to the right game
                 // and update him about his location
@@ -58,7 +58,7 @@ public class GameWebSocket {
                     return;
                 }
 
-                player.getBasicRemote().sendObject(new UpdateMessage("Parsed successfully!"));
+                player.getBasicRemote().sendObject(new UpdateMessage("Parsed successfully!", MessageType.Notification));
             } else {
                 player.getBasicRemote().sendObject(new ErrorMessage("Bad message"));
             }
