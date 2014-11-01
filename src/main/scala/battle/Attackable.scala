@@ -1,23 +1,24 @@
 package battle;
 
-import scala.util.Random;
+import core.Game;
 
 trait Attackable {
+  val game: Game;
   val maxHealth: Int;
   private var health = maxHealth;
   def attack(enemy: Attackable, weapon: Weapon) {
-    if (Random.nextInt(100) < weapon.accuracy) { // hit!
+    if (scala.util.Random.nextInt(100) < weapon.accuracy) { // hit!
       enemy.health = math.max(enemy.health - weapon.power, 0);
       hit(enemy);
       weapon.decay;
-      enemy.wasHitBy(enemy, weapon.name, weapon.power);
+      enemy.wasHitBy(this, weapon.name, weapon.power);
       if (enemy.health == 0) {
         killed(enemy);
         enemy.wasKilled();
       }
     } else { // miss!
       missed(enemy);
-      enemy.wasMissedBy(enemy, weapon.name);
+      enemy.wasMissedBy(this, weapon.name);
     }
   }
   def heal(amount: Int) {

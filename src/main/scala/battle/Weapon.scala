@@ -3,13 +3,13 @@ package battle;
 import core.Item;
 
 class Weapon(
-  name: String,
-  description: String,
-  value: Int,
+  override val name: String,
+  override val description: String,
+  override val value: Int,
   val power: Int,
   val accuracy: Int, // percentage
   private var decayOpt: Option[Int] = None,
-  decayCallbackOpt: Option[() => Unit] = None
+  private val decayCallbackOpt: Option[() => Unit] = None
 ) extends Item(name, description, value) {
   def decay = decayOpt.foreach(decay => {
     if (decay > 0) {
