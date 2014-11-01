@@ -31,7 +31,7 @@ $(function () {
             var classForType = 'log-Notification';
             if (resp.hasOwnProperty("type"))
                 classForType = 'log-' + resp.type;
-            $log.append($("<div class='log-line" + classForType + "'>").text(resp.update));
+            $log.append($("<div class='log-line " + classForType + "'>").text(resp.update));
 
         } else if (resp.hasOwnProperty("error")) {
             $log.append($("<div class='log-line log-fatal'>").text(resp.error));

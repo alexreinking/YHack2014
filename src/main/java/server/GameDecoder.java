@@ -30,10 +30,10 @@ public class GameDecoder implements Decoder.Text<GameMessage> {
             } catch (NullPointerException e) {
             }
         }
-        return null;
+        throw new DecodeException(s, "JSON object was none of login, update, cmd, or error.");
     }
 
-    private MessageType decodeMessageType(String type) {
+    private MessageType decodeMessageType(String type) throws DecodeException {
         switch (type) {
             case "Notification":
                 return MessageType.Notification;
@@ -46,14 +46,15 @@ public class GameDecoder implements Decoder.Text<GameMessage> {
             case "Alert":
                 return MessageType.Alert;
         }
-        return null;
+        throw new DecodeException(type, "type not in ['Notification', 'Success', 'Failure', 'Warning', 'Alert']");
     }
 
     @Override
-    public boolean willDecode(String s) { // derp
+    public boolean willDecode(String s) {
         try {
-            return decode(s) != null;
-        } catch (Exception e) {
+            decode(s);
+            return true;
+        } catch (DecodeException e) {
             return false;
         }
     }
