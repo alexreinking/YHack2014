@@ -10,7 +10,7 @@ public class WobblyRoom extends Room {
     }
 
     @Override
-    private Room goTo(String instruction){
+    public Room goTo(String instruction){
         if (instruction.toLowerCase().contains("north")) {
             return neighbors.get("south");
         }
@@ -22,6 +22,9 @@ public class WobblyRoom extends Room {
         }
         else if (instruction.toLowerCase().contains("west")) {
             return neighbors.get("east");
+        }
+        else {
+            return this;
         }
 
     }
