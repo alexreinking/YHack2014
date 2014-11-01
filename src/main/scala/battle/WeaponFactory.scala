@@ -53,9 +53,9 @@ object WeaponFactory {
     decayCallbackOpt = decayCallbackOpt
   )
 
-  def buildAlienBlaster (decayCallbackOpt: Option[() => Unit]) = new Weapon (
-    name = "alien blaster",
-    description = "what the hell is this weird-looking thing?",
+  def buildJarOfJapaneseGiantHornets (decayCallbackOpt: Option[() => Unit]) = new Weapon (
+    name = "a jar of japanese giant hornets",
+    description = "what the hell are these things?",
     value = 100,
     power = 100,
     accuracy = 100,
