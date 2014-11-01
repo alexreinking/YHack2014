@@ -17,18 +17,18 @@ import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.logging.Logger;
 
-@ServerEndpoint(value = "/game/{room}", decoders = GameDecoder.class, encoders = GameEncoder.class)
+@ServerEndpoint(value = "/game/{lobby}", decoders = GameDecoder.class, encoders = GameEncoder.class)
 public class GameWebSocket {
-    private static final Set<Session> EMPTY_ROOM = Collections.emptySet();
-    private static final ConcurrentMap<String, Set<Session>> rooms = new ConcurrentHashMap<>();
+    private static final Set<Session> EMPTY_LOBBY = Collections.emptySet();
+    private static final ConcurrentMap<String, Set<Session>> lobbies = new ConcurrentHashMap<>();
 
     @OnOpen
-    public void onOpen(final Session player, @PathParam("room") final String room) {
-        rooms.computeIfAbsent(room, s -> new CopyOnWriteArraySet<>()).add(player);
+    public void onOpen(final Session player, @PathParam("lobby") final String lobby) {
+        lobbies.computeIfAbsent(lobby, s -> new CopyOnWriteArraySet<>()).add(player);
     }
 
     @OnMessage
-    public void onMessage(GameMessage message, Session player, @PathParam("room") String room) {
+    public void onMessage(GameMessage message, Session player, @PathParam("lobby") String lobby) {
         try {
             if (message instanceof LoginMessage) {
                 if(isLoggedIn(player)) {
@@ -37,7 +37,7 @@ public class GameWebSocket {
                 }
 
                 String possibleName = message.argument();
-                for (Session peer : rooms.getOrDefault(room, EMPTY_ROOM))
+                for (Session peer : lobbies.getOrDefault(lobby, EMPTY_LOBBY))
                     if (possibleName.equals(peer.getUserProperties().getOrDefault("name", ""))) {
                         player.getBasicRemote().sendObject(new ErrorMessage(possibleName + " is already taken."));
                         return;
@@ -72,7 +72,7 @@ public class GameWebSocket {
     }
 
     @OnClose
-    public void onClose(Session player, @PathParam("room") String room) {
-        rooms.getOrDefault(room, EMPTY_ROOM).remove(player);
+    public void onClose(Session player, @PathParam("lobby") String lobby) {
+        lobbies.getOrDefault(lobby, EMPTY_LOBBY).remove(player);
     }
 }

@@ -11,5 +11,5 @@ class Game {
   }
 
   def killFoe(foe: Foe) { /* fill this in */ }
-def killPlayer(player: Player) { /* fill this in */ }
+  def killPlayer(player: Player) { /* fill this in */ }
 }

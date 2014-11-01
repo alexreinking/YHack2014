@@ -7,7 +7,7 @@ class Foe(
   val maxHealth: Int,
   val game: Game,
   val nature: FightingNature,
-  val weapon: Weapon,
+  val weapon: Weapon
 ) extends Attackable {
   protected def hit(enemy: Attackable) { }
   protected def missed(enemy: Attackable) { }
