@@ -26,8 +26,7 @@ public class GameDecoder implements Decoder.Text<GameMessage> {
                     case "error":
                         return new ErrorMessage(obj.getString(type));
                 }
-            } catch (NullPointerException e) {
-            }
+            } catch (NullPointerException e) {}
         }
         return null;
     }

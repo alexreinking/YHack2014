@@ -46,6 +46,8 @@ public class GameWebSocket {
                 player.getUserProperties().put("name", possibleName);
                 player.getBasicRemote().sendObject(new UpdateMessage("You have logged in as " + possibleName + "!"));
 
+                // Should add the player to the right game
+                // and update him about his location
             } else if (isLoggedIn(player) && message instanceof CommandMessage) {
                 CommandLexer lexer = new CommandLexer(new ANTLRInputStream(message.argument()));
                 CommandParser parser = new CommandParser(new BufferedTokenStream(lexer));
