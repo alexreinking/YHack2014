@@ -1,9 +1,25 @@
+/* Thanks, Moustache! */
+var entityMap = {
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': '&quot;',
+    "'": '&#39;',
+    "/": '&#x2F;'
+};
+
+function escapeHtml(string) {
+    return String(string).replace(/[&<>"'\/]/g, function (s) {
+        return entityMap[s];
+    });
+}
+
 $(function () {
     $("#command").keyup(function (e) {
         if (e.keyCode === 13) {
             var $command = $("#command");
             var $log = $(".log");
-            $log.append("\n" + $command.val());
+            $log.append($("<div class='log-line'>").text($command.val()));
             $command.val("");
             $log.scrollTop($log.height());
         }
