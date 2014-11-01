@@ -15,9 +15,10 @@ function escapeHtml(string) {
 }
 
 $(function () {
-    $("#command").keyup(function (e) {
+    var $command = $("#command");
+
+    $command.keyup(function (e) {
         if (e.keyCode === 13) {
-            var $command = $("#command");
             var $log = $(".log");
             $log.append($("<div class='log-line'>").text($command.val()));
             $command.val("");
@@ -43,4 +44,6 @@ $(function () {
     });
 
     window.location.hash && loadPage(window.location.hash);
+
+    $command.focus();
 });
