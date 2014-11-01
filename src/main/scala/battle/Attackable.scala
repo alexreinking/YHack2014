@@ -4,21 +4,25 @@ import core.Game;
 
 trait Attackable {
   val game: Game;
+  val baseAccuracy: Int;
+  val basePower: Int;
   val maxHealth: Int;
   private var health = maxHealth;
-  def attack(enemy: Attackable, weapon: Weapon) {
-    if (scala.util.Random.nextInt(100) < weapon.accuracy) { // hit!
-      enemy.health = math.max(enemy.health - weapon.power, 0);
+  def attack(enemy: Attackable, weaponOpt: Option[Weapon]) {
+    val accuracy = weaponOpt.map(_.accuracy).getOrElse(baseAccuracy);
+    val power = weaponOpt.map(_.power).getOrElse(basePower);
+    if (scala.util.Random.nextInt(100) < accuracy) { // hit!
+      enemy.health = math.max(enemy.health - power, 0);
       hit(enemy);
-      weapon.decay;
-      enemy.wasHitBy(this, weapon.name, weapon.power);
+      weaponOpt.foreach(_.decay);
+      enemy.wasHitBy(this, power, weaponOpt.map(_.name));
       if (enemy.health == 0) {
         killed(enemy);
         enemy.wasKilled();
       }
     } else { // miss!
       missed(enemy);
-      enemy.wasMissedBy(this, weapon.name);
+      enemy.wasMissedBy(this, weaponOpt.map(_.name));
     }
   }
   def heal(amount: Int) {
@@ -30,8 +34,12 @@ trait Attackable {
   protected def hit(enemy: Attackable);
   protected def missed(enemy: Attackable);
   protected def killed(enemy: Attackable);
-  protected def wasHitBy(enemy: Attackable, weaponName: String, damage: Int);
-  protected def wasMissedBy(enemy: Attackable, weaponName: String);
+  protected def wasHitBy(
+    enemy: Attackable,
+    damage: Int,
+    weaponNameOpt: Option[String]
+  );
+  protected def wasMissedBy(enemy: Attackable, weaponNameOpt: Option[String]);
   protected def wasKilled();
   protected def wasHealed(amount: Int);
 }

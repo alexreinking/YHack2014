@@ -4,24 +4,30 @@ import battle.{ Attackable, FightingNature, Weapon }
 import battle.FightingNature.{ Passive, Defensive, Aggressive }
 
 class Foe(
-  val maxHealth: Int,
   val game: Game,
-  val nature: FightingNature,
-  val weapon: Weapon
+  val maxHealth: Int,
+  val basePower: Int = 5,
+  val baseAccuracy: Int = 100,
+  val nature: FightingNature = Defensive,
+  val weaponOpt: Option[Weapon] = None
 ) extends Attackable {
   protected def hit(enemy: Attackable) { }
   protected def missed(enemy: Attackable) { }
   protected def killed(enemy: Attackable) { }
   protected def wasHealed(amount: Int) { }
 
-  protected def wasHitBy(enemy: Attackable, weaponName: String, damage: Int) {
+  protected def wasHitBy(
+    enemy: Attackable,
+    damage: Int,
+    weaponNameOpt: Option[String]
+  ) {
     if (nature != Passive) {
-      attack(enemy, weapon);
+      attack(enemy, weaponOpt);
     }
   }
-  protected def wasMissedBy(enemy: Attackable, weaponName: String) {
+  protected def wasMissedBy(enemy: Attackable, weaponNameOpt: Option[String]) {
     if (nature != Passive) {
-      attack(enemy, weapon);
+      attack(enemy, weaponOpt);
     }
   }
   protected def wasKilled() {
