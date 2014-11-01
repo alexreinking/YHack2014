@@ -9,4 +9,7 @@ class Game {
   def getCurrentLocation(player: Player): Option[Location] = {
     _locationMap.get(player);
   }
+
+  def killFoe(foe: Foe) { /* fill this in */ }
+def killPlayer(player: Player) { /* fill this in */ }
 }

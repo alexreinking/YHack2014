@@ -55,6 +55,7 @@ extends Attackable with Notifiable with HasName {
 
   protected def wasKilled() {
     alert("Oh dear.  It seems you have died.");
+    game.killPlayer(this);
   }
 
   protected def wasHealed(amount: Int) {
