@@ -56,4 +56,8 @@ extends Attackable with Notifiable with HasName {
     alert("Oh dear.  It seems you have died.");
   }
 
+  protected def wasHealed(amount: Int) {
+    notify("You have been healed (+" + amount +")");
+  }
+
 }
