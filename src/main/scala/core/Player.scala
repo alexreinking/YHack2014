@@ -1,6 +1,7 @@
 package core;
 
 import core.MessageType.{ Notification, Success, Failure, Warning, Alert }
+import location.Location;
 import utils.Strings.addArticle;
 
 trait Attackable {}
@@ -57,6 +58,6 @@ class Player(val name: String, val game: Game) extends Attackable {
 }
 
 class Game {
-  private val _locationMap = scala.collection.mutable.Map.empty[Player, Room];
-  def getCurrentRoom(player: Player): Option[Room] = _locationMap.get(player);
+  private val _locationMap = scala.collection.mutable.Map.empty[Player, Location];
+  def getCurrentRoom(player: Player): Option[Location] = _locationMap.get(player);
 }
