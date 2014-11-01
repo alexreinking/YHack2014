@@ -38,7 +38,7 @@ public class Room {
             case "market":
                 return "mistyroom";
                 break;
-            case "etc."
+            case "etc.":
                 return "...";
                 break;
         }
@@ -62,7 +62,9 @@ public class Room {
         else if (instruction.toLowerCase().contains("west")) {
             return neighbors.get("west");
         }
-
+        else {
+            return this;
+        }
     }
 
 
