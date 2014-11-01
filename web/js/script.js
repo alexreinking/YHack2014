@@ -14,15 +14,33 @@ function escapeHtml(string) {
     });
 }
 
+var wsocket = null;
+
 $(function () {
     var $command = $("#command");
+    var $log = $(".log");
+    var loggedIn = false;
+
+    wsocket = new WebSocket('ws://' + document.location.host + document.location.pathname + 'game/global');
+
+    wsocket.onmessage = function (e) {
+        var resp = JSON.parse(e.data);
+        if(resp.hasOwnProperty("update")) {
+            loggedIn = true;
+            $log.append($("<div class='log-line'>").text(resp.update));
+        } else if (resp.hasOwnProperty("error")) {
+            $log.append($("<div class='log-error'>").text(resp.error));
+        }
+        console.log(e);
+        $log.scrollTop($log.height());
+    };
 
     $command.keyup(function (e) {
         if (e.keyCode === 13) {
-            var $log = $(".log");
-            $log.append($("<div class='log-line'>").text($command.val()));
+            if (loggedIn)
+                wsocket.send(JSON.stringify({ command: $command.val() }));
+            console.log(loggedIn);
             $command.val("");
-            $log.scrollTop($log.height());
         }
     });
 

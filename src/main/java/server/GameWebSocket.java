@@ -1,51 +1,73 @@
 package server;
 
-import javax.websocket.OnClose;
-import javax.websocket.OnMessage;
-import javax.websocket.OnOpen;
-import javax.websocket.Session;
+import antlr.CommandLexer;
+import antlr.CommandParser;
+import org.antlr.v4.runtime.ANTLRInputStream;
+import org.antlr.v4.runtime.BufferedTokenStream;
+import server.messages.*;
+
+import javax.websocket.*;
+import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
+import java.util.Collections;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.logging.Logger;
 
-@ServerEndpoint("/game")
+@ServerEndpoint(value = "/game/{room}", decoders = GameDecoder.class, encoders = GameEncoder.class)
 public class GameWebSocket {
-    /**
-     * \@OnOpen allows us to intercept the creation of a new session.
-     * The session class allows us to send data to the user.
-     * In the method onOpen, we'll let the user know that the handshake was
-     * successful.
-     */
+    private static final Set<Session> EMPTY_ROOM = Collections.emptySet();
+    private static final ConcurrentMap<String, Set<Session>> rooms = new ConcurrentHashMap<>();
+
     @OnOpen
-    public void onOpen(Session session){
-        System.out.println(session.getId() + " has opened a connection");
-        try {
-            session.getBasicRemote().sendText("Connection Established");
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
+    public void onOpen(final Session player, @PathParam("room") final String room) {
+        rooms.computeIfAbsent(room, s -> new CopyOnWriteArraySet<>()).add(player);
     }
 
-    /**
-     * When a user sends a message to the server, this method will intercept the message
-     * and allow us to react to it. For now the message is read as a String.
-     */
     @OnMessage
-    public void onMessage(String message, Session session){
-        System.out.println("Message from " + session.getId() + ": " + message);
+    public void onMessage(GameMessage message, Session player, @PathParam("room") String room) {
         try {
-            session.getBasicRemote().sendText(message);
-        } catch (IOException ex) {
-            ex.printStackTrace();
+            if (message instanceof LoginMessage) {
+                if(isLoggedIn(player)) throw new RuntimeException("already logged in");
+
+                String possibleName = message.argument();
+                for (Session peer : rooms.getOrDefault(room, EMPTY_ROOM))
+                    if (possibleName.equals(peer.getUserProperties().getOrDefault("name", ""))) {
+                        player.getBasicRemote().sendObject(new ErrorMessage(possibleName + " is already taken."));
+                        return;
+                    }
+
+                player.getUserProperties().put("name", possibleName);
+                player.getBasicRemote().sendObject(new UpdateMessage("You have logged in as " + possibleName + "!"));
+
+            } else if (isLoggedIn(player) && message instanceof CommandMessage) {
+                CommandLexer lexer = new CommandLexer(new ANTLRInputStream(message.argument()));
+                CommandParser parser = new CommandParser(new BufferedTokenStream(lexer));
+                CommandParser.CommandContext parsedCommand = parser.command();
+
+                if (parser.getNumberOfSyntaxErrors() != 0) {
+                    player.getBasicRemote().sendObject(new ErrorMessage("Malformed command"));
+                    return;
+                }
+
+                player.getBasicRemote().sendObject(new UpdateMessage("Parsed successfully!"));
+            } else {
+                player.getBasicRemote().sendObject(new ErrorMessage("Bad message"));
+            }
+        } catch (EncodeException | IOException e) {
+            System.out.println(e.getMessage());
         }
     }
 
-    /**
-     * The user closes the connection.
-     *
-     * Note: you can't send messages to the client from this method
-     */
+    private boolean isLoggedIn(Session player) {
+        return player.getUserProperties().containsKey("name");
+    }
+
     @OnClose
-    public void onClose(Session session){
-        System.out.println("Session " +session.getId()+" has ended");
+    public void onClose(Session player, @PathParam("room") String room) {
+        rooms.getOrDefault(room, EMPTY_ROOM).remove(player);
     }
 }

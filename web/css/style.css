@@ -110,6 +110,11 @@ html, body {
     overflow-x: hidden;
 }
 
+.log-error {
+    background-color: red;
+    color: black;
+}
+
 .command-line-box {
     height: 32px;
     display: flex;
