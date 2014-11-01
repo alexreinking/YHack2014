@@ -27,6 +27,7 @@ $(function () {
         var resp = JSON.parse(e.data);
         if(resp.hasOwnProperty("update")) {
             loggedIn = true;
+            $("#command-label").html("&gt;&gt;&gt;&nbsp;");
             $log.append($("<div class='log-line'>").text(resp.update));
         } else if (resp.hasOwnProperty("error")) {
             $log.append($("<div class='log-error'>").text(resp.error));
@@ -39,7 +40,8 @@ $(function () {
         if (e.keyCode === 13) {
             if (loggedIn)
                 wsocket.send(JSON.stringify({ cmd: $command.val() }));
-            console.log(loggedIn);
+            else
+                wsocket.send(JSON.stringify({ login: $command.val() }));
             $command.val("");
         }
     });

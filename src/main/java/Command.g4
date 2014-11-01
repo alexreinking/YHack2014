@@ -23,7 +23,7 @@ interaction : Touch Identifier
             | Eat Identifier
             ;
 
-attack : Attack Identifier ;
+attack : Attack Identifier (With Identifier)? ;
 gift :  Give Identifier ('the' | 'my' | 'a')? Identifier ;
 
 inventory : Open? Inventory ;
@@ -58,6 +58,7 @@ Touch: 'touch';
 Trade: 'trade';
 Up: 'up';
 Walk: 'walk';
+With: 'with';
 West: 'west' | 'w';
 
 Identifier: [A-Za-z][A-Za-z0-9]* ;
