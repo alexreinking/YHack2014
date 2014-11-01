@@ -8,8 +8,59 @@ object WeaponFactory {
     description = "a rusty bronze sword",
     value = 10,
     power = 5,
+    accuracy = 90,
+    decayOpt = None,
+    decayCallbackOpt = decayCallbackOpt
+  )
+
+  def buildMorningStar(decayCallbackOpt: Option[() => Unit]) = new Weapon(
+    name = "morning star",
+    description = "a mace with iron spikes",
+    value = 15,
+    power = 9,
+    accuracy = 70,
+    decayOpt = None,
+    decayCallbackOpt = decayCallbackOpt
+  )
+
+  def buildGreatAxe(decayCallbackOpt: Option[() => Unit]) = new Weapon(
+    name = "great axe",
+    description = "a fearsome two-handed axe",
+    value = 30,
+    power = 20,
+    accuracy = 60,
+    decayOpt = None,
+    decayCallbackOpt = decayCallbackOpt
+  )
+
+  def buildLongBow (decayCallbackOpt: Option[() => Unit]) = new Weapon(
+    name = "longbow",
+    description = "a bow made from mahogany wood",
+    value = 25,
+    power = 10,
+    accuracy = 80,
+    decayOpt = None,
+    decayCallbackOpt = decayCallbackOpt
+  )
+
+  def buildElvishSword (decayCallbackOpt: Option[() => Unit]) = new Weapon(
+    name = "elvish sword",
+    description = "a highly accurate, elven-made broadsword",
+    value = 30,
+    power = 10,
     accuracy = 100,
     decayOpt = None,
     decayCallbackOpt = decayCallbackOpt
-  );
+  )
+
+  def buildAlienBlaster (decayCallbackOpt: Option[() => Unit]) = new Weapon (
+    name = "alien blaster",
+    description = "what the hell is this weird-looking thing?",
+    value = 100,
+    power = 100,
+    accuracy = 100,
+    decayOpt = None,
+    decayCallbackOpt = decayCallbackOpt
+  )
+
 }
