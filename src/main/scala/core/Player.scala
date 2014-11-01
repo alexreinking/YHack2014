@@ -6,6 +6,7 @@ import utils.Strings.addArticle;
 class Player(val name: String, val game: Game)
 extends Attackable with Notifiable with HasName {
   private val _inventory = scala.collection.mutable.ListBuffer.empty[Item];
+  val maxHealth = 100;
   def inventory = _inventory.toList;
   def currentLocation = game.getCurrentLocation(this);
   def giveItem(player: Player, itemName: String, indexOpt: Option[Int] = None) {
