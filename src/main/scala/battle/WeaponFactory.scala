@@ -1,7 +1,5 @@
 package battle;
 
-import core.Item;
-
 object WeaponFactory {
   def buildBronzeSword(decayCallbackOpt: Option[() => Unit]) = new Weapon(
     name = "bronze sword",
