@@ -1,6 +1,9 @@
 grammar Command;
 
-command : movement
+command : specificCommand EOF ;
+
+specificCommand
+        : movement
         | inspection
         | interaction
         | attack
@@ -14,23 +17,25 @@ relativeMovement : (Go | Walk)? direction ;
 specificMovement : (Enter | Exit) Identifier ;
 direction : North | South | East | West | Up | Down | Leave ;
 
-inspection : (Look 'at' | Inspect | Examine) Identifier ;
+inspection : (Look 'at' | Inspect | Examine) longName ;
 
-interaction : Touch Identifier
-            | Pick 'up' Identifier
-            | Take Identifier
-            | Drop Identifier
-            | Eat Identifier
+interaction : Touch longName
+            | Pick 'up' longName
+            | Take longName
+            | Drop longName
+            | Eat longName
             ;
 
-attack : Attack Identifier (With Identifier)? ;
-gift :  Give Identifier ('the' | 'my' | 'a')? Identifier ;
+attack : Attack longName (With longName)? ;
+gift :  Give Identifier ('the' | 'my' | 'a')? longName ;
 
 inventory : Open? Inventory ;
 
 check : checkHealth | checkStatus ;
 checkHealth : Check? Health;
 checkStatus : Check? Status;
+
+longName : Identifier+;
 
 Attack: 'attack';
 Check: 'check';
