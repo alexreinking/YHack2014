@@ -12,7 +12,7 @@ public class Room {
 
     private String type;
     private int numrooms;
-    private Map <String, Room> neighbors = new HashMap<>();
+    protected Map <String, Room> neighbors = new HashMap<>();
 
 
     public Room(String startType){
@@ -23,7 +23,7 @@ public class Room {
     private String getDescription() {
         return getTypeDescription(type) + "There are " + numrooms + "rooms to the "
                 + neighbors.keySet().toString() + ". " + "What will you do?";
-                     // fix commas and spacing in keySet()
+        // fix commas and spacing in keySet()
     }
 
     private int getNumRooms() {
