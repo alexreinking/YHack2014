@@ -38,7 +38,7 @@ $(function () {
     $command.keyup(function (e) {
         if (e.keyCode === 13) {
             if (loggedIn)
-                wsocket.send(JSON.stringify({ command: $command.val() }));
+                wsocket.send(JSON.stringify({ cmd: $command.val() }));
             console.log(loggedIn);
             $command.val("");
         }

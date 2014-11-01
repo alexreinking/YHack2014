@@ -31,7 +31,10 @@ public class GameWebSocket {
     public void onMessage(GameMessage message, Session player, @PathParam("room") String room) {
         try {
             if (message instanceof LoginMessage) {
-                if(isLoggedIn(player)) throw new RuntimeException("already logged in");
+                if(isLoggedIn(player)) {
+                    player.getBasicRemote().sendObject(new ErrorMessage("already logged in"));
+                    return;
+                }
 
                 String possibleName = message.argument();
                 for (Session peer : rooms.getOrDefault(room, EMPTY_ROOM))
