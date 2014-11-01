@@ -1,0 +1,142 @@
+@import url(http://fonts.googleapis.com/css?family=PT+Sans);
+@import url("BebasNeue/BebasNeue.css");
+
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: 'PT Sans', 'Helvetica', sans-serif;
+}
+
+.container {
+    display: flex;
+    flex-direction: row-reverse;
+    height: 100%;;
+}
+
+.sidebar {
+    width: 280px;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    overflow-y: scroll;
+}
+
+.sidebar .logo {
+    width: 180px;
+    height: 180px;
+    border-radius: 90px;
+    box-shadow: 0 0 14px #222;
+    margin: 10px auto;
+}
+
+.sidebar nav {
+    flex: 1;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.sidebar nav h1 {
+    background-color: #ddd;
+    padding: 5px 0;
+    margin: 5px 0;
+    font-family: 'BebasNeue', 'PT Sans', 'Helvetica', sans-serif;
+    font-size: 2.1em;
+}
+
+.sidebar nav a {
+    display: inline-block;
+    height: 48px;
+    width: 100%;
+    line-height: 48px;
+    text-decoration: none;
+    color: black;
+}
+
+.sidebar nav a:hover {
+    color: green;
+    background-color: #dddddd;
+}
+
+.panel {
+    width: 280px;
+    height: 100%;
+    margin-left: -280px;
+    transition: margin-left 0.3s linear;
+    background-color: white;
+    overflow-y: scroll;
+}
+
+.panel.showing {
+    margin-left: 0;
+}
+
+.panel p {
+    padding: 0 10px;
+    font-size: 0.9em;
+}
+
+.panel h1 {
+    background-color: #ddd;
+    padding: 5px 0;
+    margin: 0 0 10px;
+    font-family: 'BebasNeue', 'PT Sans', 'Helvetica', sans-serif;
+    font-size: 2.1em;
+    text-transform: uppercase;
+    text-align: center;
+}
+
+.panel code {
+    display: block;
+    padding: 20px 10px;
+    background-color: #eee;
+}
+
+.terminal {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    color: #00ff00;
+    background-color: black;
+    font-family: 'Monaco', 'Courier', 'Lucida Console', monospace;
+    font-size: 14px;
+}
+
+.log {
+    flex: 1;
+    padding-left: 10px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+.command-line-box {
+    height: 32px;
+    display: flex;
+    padding-left: 10px;
+    line-height: 32px;
+    border-top: 1px solid #dddddd;
+}
+
+.command-line-box label {
+    height: 100%;
+    display: inline-block;
+    text-align: right;
+}
+
+.command-line-box input {
+    height: 100%;
+    border: none;
+    outline: none;
+    flex: 1;
+
+    font-family: 'Monaco', 'Courier', 'Lucida Console', monospace;
+    font-size: 14px;
+    line-height: 100%;
+
+    padding: 0;
+    margin: 0;
+
+    color: #00ff00;
+    background-color: black;
+}
