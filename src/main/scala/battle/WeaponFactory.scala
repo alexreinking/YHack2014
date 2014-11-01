@@ -19,7 +19,7 @@ object WeaponFactory {
     value = 15,
     power = 9,
     accuracy = 70,
-    decayOpt = None,
+    decayOpt = Some(10),
     decayCallbackOpt = decayCallbackOpt
   )
 
@@ -29,7 +29,7 @@ object WeaponFactory {
     value = 30,
     power = 20,
     accuracy = 60,
-    decayOpt = None,
+    decayOpt = Some(10),
     decayCallbackOpt = decayCallbackOpt
   )
 
@@ -39,7 +39,7 @@ object WeaponFactory {
     value = 25,
     power = 10,
     accuracy = 80,
-    decayOpt = None,
+    decayOpt = Some(15),
     decayCallbackOpt = decayCallbackOpt
   )
 
@@ -49,7 +49,7 @@ object WeaponFactory {
     value = 30,
     power = 10,
     accuracy = 100,
-    decayOpt = None,
+    decayOpt = Some(20),
     decayCallbackOpt = decayCallbackOpt
   )
 
@@ -59,7 +59,7 @@ object WeaponFactory {
     value = 100,
     power = 100,
     accuracy = 100,
-    decayOpt = None,
+    decayOpt = Some(1),
     decayCallbackOpt = decayCallbackOpt
   )
 
