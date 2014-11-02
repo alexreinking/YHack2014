@@ -1,10 +1,12 @@
-package state;
+package server;
 
 import antlr.CommandBaseVisitor;
 import antlr.CommandParser;
 import core.MessageType;
 import org.antlr.v4.runtime.misc.NotNull;
 import org.antlr.v4.runtime.tree.ParseTree;
+import state.Game;
+import state.Player;
 
 import java.util.StringJoiner;
 
