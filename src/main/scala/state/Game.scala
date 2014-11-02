@@ -1,7 +1,6 @@
 package state;
 
 import location.{Room, Location}
-;
 import javax.websocket.Session;
 import scala.util.Random;
 import utils.OptionUtils.optional2Option;
