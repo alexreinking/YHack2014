@@ -12,31 +12,53 @@ class Player(
   val session: Session,
   val game: Game
 ) extends Attackable with Notifiable with HasName {
+  def addItem(item: Item) {
+    _inventory += item;
+    sendSuccess("You have acquired " + addArticle(item.name));
+  }
+
   val maxHealth = 100;
   val basePower = 5;
   val baseAccuracy = 100;
+
   private val _inventory = scala.collection.mutable.ListBuffer.empty[Item];
   def inventory = _inventory.toList;
   
-  def giveItem(player: Player, itemName: String, indexOpt: Option[Int] = None) {
+  def giveItem(otherPlayer: Player, itemName: String, indexOpt: Option[Int] = None) {
     val matchingItems = indexOpt
-      .map(index => inventory.filter(_.name == itemName).lift(index).toList)
-      .getOrElse(inventory.filter(_.name == itemName));
+      .map(index => inventory.filter(_.name.equalsIgnoreCase(itemName)).lift(index).toList)
+      .getOrElse(inventory.filter(_.name.equalsIgnoreCase(itemName)));
     if (matchingItems.isEmpty) {
       sendFailure("You don't have " + addArticle(itemName) + " to trade.");
     } else if (matchingItems.size == 1) {
       matchingItems.lift(0).foreach(item => {
         _inventory -= item;
-        player._inventory += item;
-        player.sendSuccess("Received " + addArticle(item) + " from " + this);
-        sendSuccess("Sent " + addArticle(item) + " to " + player);
+        otherPlayer._inventory += item;
+        otherPlayer.sendSuccess("Received " + addArticle(item) + " from " + this);
+        sendSuccess("Sent " + addArticle(item) + " to " + otherPlayer);
       })
     } else {
-      sendItemSpecificationRequest(player, matchingItems);
+      sendItemSpecificationRequest(matchingItems);
     }
   }
 
-  private def sendItemSpecificationRequest(player: Player, items: List[Item]) {
+  def dropItem(itemName: String, indexOpt: Option[Int] = None) {
+    val matchingItems = indexOpt
+      .map(index => inventory.filter(_.name.equalsIgnoreCase(itemName)).lift(index).toList)
+      .getOrElse(inventory.filter(_.name.equalsIgnoreCase(itemName)));
+    if (matchingItems.isEmpty) {
+      sendFailure("You don't have " + addArticle(itemName) + " to drop.");
+    } else if (matchingItems.size == 1) {
+      matchingItems.lift(0).foreach(item => {
+        _inventory -= item;
+        notify("Dropped " + addArticle(item));
+      })
+    } else {
+      sendItemSpecificationRequest(matchingItems);
+    }
+  }
+
+  private def sendItemSpecificationRequest(items: List[Item]) {
     session.getBasicRemote.sendObject(
       new RequestMessage("choose", items.map(_.name).asJava, -1)
     );

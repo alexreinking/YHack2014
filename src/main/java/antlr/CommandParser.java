@@ -17,17 +17,18 @@ public class CommandParser extends Parser {
 	protected static final PredictionContextCache _sharedContextCache =
 		new PredictionContextCache();
 	public static final int
-		T__3=1, T__2=2, T__1=3, T__0=4, Attack=5, Check=6, Down=7, Drop=8, East=9, 
-		Eat=10, Enter=11, Examine=12, Exit=13, Give=14, Go=15, Health=16, Inspect=17, 
-		Inventory=18, Leave=19, Look=20, North=21, Open=22, Pick=23, South=24, 
-		Status=25, Take=26, Touch=27, Trade=28, Up=29, Walk=30, With=31, West=32, 
-		Number=33, Identifier=34, WS=35;
+		T__3=1, T__2=2, T__1=3, T__0=4, Attack=5, Assault=6, Pwn=7, Kill=8, Check=9, 
+		Down=10, Drop=11, East=12, Eat=13, Enter=14, Examine=15, Exit=16, Give=17, 
+		Go=18, Health=19, Inspect=20, Inventory=21, Leave=22, Look=23, North=24, 
+		Open=25, Pick=26, South=27, Status=28, Take=29, Touch=30, Trade=31, Up=32, 
+		Walk=33, With=34, West=35, Mercilessly=36, Number=37, Identifier=38, WS=39;
 	public static final String[] tokenNames = {
-		"<INVALID>", "'at'", "'a'", "'my'", "'the'", "'attack'", "'check'", "'down'", 
-		"'drop'", "East", "'eat'", "'enter'", "'examine'", "'exit'", "'give'", 
-		"'go'", "'health'", "'inspect'", "Inventory", "'leave'", "'look'", "North", 
-		"'open'", "'pick'", "South", "'status'", "'take'", "'touch'", "'trade'", 
-		"'up'", "'walk'", "'with'", "West", "Number", "Identifier", "WS"
+		"<INVALID>", "'at'", "'a'", "'my'", "'the'", "'attack'", "'assault'", 
+		"'pwn'", "'kill'", "'check'", "'down'", "'drop'", "East", "'eat'", "'enter'", 
+		"'examine'", "'exit'", "'give'", "'go'", "'health'", "'inspect'", "Inventory", 
+		"'leave'", "'look'", "North", "'open'", "'pick'", "South", "'status'", 
+		"'take'", "'touch'", "'trade'", "'up'", "'walk'", "'with'", "West", "'mercilessly'", 
+		"Number", "Identifier", "WS"
 	};
 	public static final int
 		RULE_command = 0, RULE_specificCommand = 1, RULE_movement = 2, RULE_relativeMovement = 3, 
@@ -621,12 +622,15 @@ public class CommandParser extends Parser {
 
 	public static class AttackContext extends ParserRuleContext {
 		public TerminalNode Attack() { return getToken(CommandParser.Attack, 0); }
+		public TerminalNode Kill() { return getToken(CommandParser.Kill, 0); }
 		public LongNameContext longName(int i) {
 			return getRuleContext(LongNameContext.class,i);
 		}
+		public TerminalNode Pwn() { return getToken(CommandParser.Pwn, 0); }
 		public List<LongNameContext> longName() {
 			return getRuleContexts(LongNameContext.class);
 		}
+		public TerminalNode Assault() { return getToken(CommandParser.Assault, 0); }
 		public TerminalNode With() { return getToken(CommandParser.With, 0); }
 		public AttackContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -654,7 +658,12 @@ public class CommandParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(84); match(Attack);
+			setState(84);
+			_la = _input.LA(1);
+			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << Attack) | (1L << Assault) | (1L << Pwn) | (1L << Kill))) != 0)) ) {
+			_errHandler.recoverInline(this);
+			}
+			consume();
 			setState(85); longName();
 			setState(88);
 			_la = _input.LA(1);
@@ -1024,7 +1033,7 @@ public class CommandParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u0430\ud6d1\u8206\uad2d\u4417\uaef1\u8d80\uaadd\3%~\4\2\t\2\4\3\t\3"+
+		"\3\u0430\ud6d1\u8206\uad2d\u4417\uaef1\u8d80\uaadd\3)~\4\2\t\2\4\3\t\3"+
 		"\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4\13\t\13\4\f"+
 		"\t\f\4\r\t\r\4\16\t\16\4\17\t\17\4\20\t\20\3\2\3\2\3\2\3\3\3\3\3\3\3\3"+
 		"\3\3\3\3\3\3\5\3+\n\3\3\4\3\4\5\4/\n\4\3\5\5\5\62\n\5\3\5\3\5\3\6\3\6"+
@@ -1033,29 +1042,29 @@ public class CommandParser extends Parser {
 		"\n\3\n\5\n[\n\n\3\13\3\13\3\13\5\13`\n\13\3\13\3\13\5\13d\n\13\3\f\5\f"+
 		"g\n\f\3\f\3\f\3\r\3\r\5\rm\n\r\3\16\5\16p\n\16\3\16\3\16\3\17\5\17u\n"+
 		"\17\3\17\3\17\3\20\6\20z\n\20\r\20\16\20{\3\20\2\2\21\2\4\6\b\n\f\16\20"+
-		"\22\24\26\30\32\34\36\2\6\4\2\21\21  \4\2\r\r\17\17\t\2\t\t\13\13\25\25"+
-		"\27\27\32\32\37\37\"\"\3\2\4\6\u0087\2 \3\2\2\2\4*\3\2\2\2\6.\3\2\2\2"+
-		"\b\61\3\2\2\2\n\65\3\2\2\2\f8\3\2\2\2\16?\3\2\2\2\20T\3\2\2\2\22V\3\2"+
-		"\2\2\24\\\3\2\2\2\26f\3\2\2\2\30l\3\2\2\2\32o\3\2\2\2\34t\3\2\2\2\36y"+
-		"\3\2\2\2 !\5\4\3\2!\"\7\2\2\3\"\3\3\2\2\2#+\5\6\4\2$+\5\16\b\2%+\5\20"+
-		"\t\2&+\5\22\n\2\'+\5\24\13\2(+\5\26\f\2)+\5\30\r\2*#\3\2\2\2*$\3\2\2\2"+
-		"*%\3\2\2\2*&\3\2\2\2*\'\3\2\2\2*(\3\2\2\2*)\3\2\2\2+\5\3\2\2\2,/\5\b\5"+
-		"\2-/\5\n\6\2.,\3\2\2\2.-\3\2\2\2/\7\3\2\2\2\60\62\t\2\2\2\61\60\3\2\2"+
-		"\2\61\62\3\2\2\2\62\63\3\2\2\2\63\64\5\f\7\2\64\t\3\2\2\2\65\66\t\3\2"+
-		"\2\66\67\5\36\20\2\67\13\3\2\2\289\t\4\2\29\r\3\2\2\2:;\7\26\2\2;@\7\3"+
-		"\2\2<@\7\23\2\2=@\7\16\2\2>@\7\30\2\2?:\3\2\2\2?<\3\2\2\2?=\3\2\2\2?>"+
-		"\3\2\2\2@A\3\2\2\2AB\5\36\20\2B\17\3\2\2\2CD\7\35\2\2DU\5\36\20\2EF\7"+
-		"\31\2\2FG\7\37\2\2GU\5\36\20\2HI\7\34\2\2IU\5\36\20\2JL\7\n\2\2KM\t\5"+
-		"\2\2LK\3\2\2\2LM\3\2\2\2MN\3\2\2\2NP\5\36\20\2OQ\7#\2\2PO\3\2\2\2PQ\3"+
-		"\2\2\2QU\3\2\2\2RS\7\f\2\2SU\5\36\20\2TC\3\2\2\2TE\3\2\2\2TH\3\2\2\2T"+
-		"J\3\2\2\2TR\3\2\2\2U\21\3\2\2\2VW\7\7\2\2WZ\5\36\20\2XY\7!\2\2Y[\5\36"+
-		"\20\2ZX\3\2\2\2Z[\3\2\2\2[\23\3\2\2\2\\]\7\20\2\2]_\5\36\20\2^`\t\5\2"+
-		"\2_^\3\2\2\2_`\3\2\2\2`a\3\2\2\2ac\5\36\20\2bd\7#\2\2cb\3\2\2\2cd\3\2"+
-		"\2\2d\25\3\2\2\2eg\7\30\2\2fe\3\2\2\2fg\3\2\2\2gh\3\2\2\2hi\7\24\2\2i"+
+		"\22\24\26\30\32\34\36\2\7\4\2\24\24##\4\2\20\20\22\22\t\2\f\f\16\16\30"+
+		"\30\32\32\35\35\"\"%%\3\2\4\6\3\2\7\n\u0087\2 \3\2\2\2\4*\3\2\2\2\6.\3"+
+		"\2\2\2\b\61\3\2\2\2\n\65\3\2\2\2\f8\3\2\2\2\16?\3\2\2\2\20T\3\2\2\2\22"+
+		"V\3\2\2\2\24\\\3\2\2\2\26f\3\2\2\2\30l\3\2\2\2\32o\3\2\2\2\34t\3\2\2\2"+
+		"\36y\3\2\2\2 !\5\4\3\2!\"\7\2\2\3\"\3\3\2\2\2#+\5\6\4\2$+\5\16\b\2%+\5"+
+		"\20\t\2&+\5\22\n\2\'+\5\24\13\2(+\5\26\f\2)+\5\30\r\2*#\3\2\2\2*$\3\2"+
+		"\2\2*%\3\2\2\2*&\3\2\2\2*\'\3\2\2\2*(\3\2\2\2*)\3\2\2\2+\5\3\2\2\2,/\5"+
+		"\b\5\2-/\5\n\6\2.,\3\2\2\2.-\3\2\2\2/\7\3\2\2\2\60\62\t\2\2\2\61\60\3"+
+		"\2\2\2\61\62\3\2\2\2\62\63\3\2\2\2\63\64\5\f\7\2\64\t\3\2\2\2\65\66\t"+
+		"\3\2\2\66\67\5\36\20\2\67\13\3\2\2\289\t\4\2\29\r\3\2\2\2:;\7\31\2\2;"+
+		"@\7\3\2\2<@\7\26\2\2=@\7\21\2\2>@\7\33\2\2?:\3\2\2\2?<\3\2\2\2?=\3\2\2"+
+		"\2?>\3\2\2\2@A\3\2\2\2AB\5\36\20\2B\17\3\2\2\2CD\7 \2\2DU\5\36\20\2EF"+
+		"\7\34\2\2FG\7\"\2\2GU\5\36\20\2HI\7\37\2\2IU\5\36\20\2JL\7\r\2\2KM\t\5"+
+		"\2\2LK\3\2\2\2LM\3\2\2\2MN\3\2\2\2NP\5\36\20\2OQ\7\'\2\2PO\3\2\2\2PQ\3"+
+		"\2\2\2QU\3\2\2\2RS\7\17\2\2SU\5\36\20\2TC\3\2\2\2TE\3\2\2\2TH\3\2\2\2"+
+		"TJ\3\2\2\2TR\3\2\2\2U\21\3\2\2\2VW\t\6\2\2WZ\5\36\20\2XY\7$\2\2Y[\5\36"+
+		"\20\2ZX\3\2\2\2Z[\3\2\2\2[\23\3\2\2\2\\]\7\23\2\2]_\5\36\20\2^`\t\5\2"+
+		"\2_^\3\2\2\2_`\3\2\2\2`a\3\2\2\2ac\5\36\20\2bd\7\'\2\2cb\3\2\2\2cd\3\2"+
+		"\2\2d\25\3\2\2\2eg\7\33\2\2fe\3\2\2\2fg\3\2\2\2gh\3\2\2\2hi\7\27\2\2i"+
 		"\27\3\2\2\2jm\5\32\16\2km\5\34\17\2lj\3\2\2\2lk\3\2\2\2m\31\3\2\2\2np"+
-		"\7\b\2\2on\3\2\2\2op\3\2\2\2pq\3\2\2\2qr\7\22\2\2r\33\3\2\2\2su\7\b\2"+
-		"\2ts\3\2\2\2tu\3\2\2\2uv\3\2\2\2vw\7\33\2\2w\35\3\2\2\2xz\7$\2\2yx\3\2"+
-		"\2\2z{\3\2\2\2{y\3\2\2\2{|\3\2\2\2|\37\3\2\2\2\21*.\61?LPTZ_cflot{";
+		"\7\13\2\2on\3\2\2\2op\3\2\2\2pq\3\2\2\2qr\7\25\2\2r\33\3\2\2\2su\7\13"+
+		"\2\2ts\3\2\2\2tu\3\2\2\2uv\3\2\2\2vw\7\36\2\2w\35\3\2\2\2xz\7(\2\2yx\3"+
+		"\2\2\2z{\3\2\2\2{y\3\2\2\2{|\3\2\2\2|\37\3\2\2\2\21*.\61?LPTZ_cflot{";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {

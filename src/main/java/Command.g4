@@ -26,7 +26,7 @@ interaction : Touch longName
             | Eat longName
             ;
 
-attack : Attack longName (With longName)? ;
+attack : (Attack | Assault | Pwn | Kill) longName (With longName)? ;
 gift :  Give longName ('the' | 'my' | 'a')? longName Number? ;
 
 inventory : Open? Inventory ;
@@ -38,6 +38,9 @@ checkStatus : Check? Status;
 longName : Identifier+;
 
 Attack: 'attack';
+Assault: 'assault';
+Pwn: 'pwn';
+Kill: 'kill';
 Check: 'check';
 Down: 'down';
 Drop: 'drop';
@@ -65,6 +68,8 @@ Up: 'up';
 Walk: 'walk';
 With: 'with';
 West: 'west' | 'w';
+
+Mercilessly: 'mercilessly' -> skip ;
 
 Number: [0-9][0-9]* ;
 Identifier: [A-Za-z][A-Za-z0-9]* ;

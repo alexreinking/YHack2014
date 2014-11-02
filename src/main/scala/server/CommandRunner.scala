@@ -19,6 +19,24 @@ class CommandRunner(gameRoom: Game, issuingPlayer: Player) extends CommandBaseVi
     super.visitRelativeMovement(ctx)
   }
 
+  override def visitInteraction(ctx: InteractionContext): Void = {
+    val longName = joinLongName(ctx.longName())
+
+    if (ctx.Drop() != null) {
+      issuingPlayer.dropItem(longName, if (ctx.Number() != null) Some(ctx.Number().getText.toInt) else None)
+    } else if(ctx.Eat() != null) {
+
+    } else if(ctx.Touch() != null) {
+
+    } else if(ctx.Take() != null) {
+      gameRoom.take(issuingPlayer, longName);
+    } else if(ctx.Pick() != null) {
+
+    }
+
+    super.visitInteraction(ctx)
+  }
+
   override def visitSpecificMovement(ctx: SpecificMovementContext): Void = {
     gameRoom.move(issuingPlayer, joinLongName(ctx.longName()))
     super.visitSpecificMovement(ctx)
@@ -41,7 +59,7 @@ class CommandRunner(gameRoom: Game, issuingPlayer: Player) extends CommandBaseVi
   override def visitInventory(ctx: InventoryContext): Void = {
     if (issuingPlayer.inventory.isEmpty) issuingPlayer.notify("Your inventory is empty.")
     else issuingPlayer.inventory.zipWithIndex.foreach({
-      case (item, i) => issuingPlayer.notify("(%d) %s %s".format(i + 1, item.name, item.description))
+      case (item, i) => issuingPlayer.notify("(%d) %s: %s".format(i + 1, item.name, item.description))
     })
     super.visitInventory(ctx)
   }

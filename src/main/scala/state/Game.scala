@@ -1,5 +1,6 @@
 package state;
 
+import core.Item
 import location.{Room, Location}
 import javax.websocket.Session;
 import scala.util.Random;
@@ -11,6 +12,9 @@ class Game {
     scala.collection.mutable.Map.empty[Player, Location];
   private val foeLocations =
     scala.collection.mutable.Map.empty[Foe, Location];
+
+  // add the initial items
+  worldMap.headOption.foreach(_._2.add(new Item("Holy Grail", "Only the holiest of the grails", 1000000)));
 
   def killPlayer(player: Player) {
     playerLocations.get(player).flatMap(worldMap.get).foreach(_.remove(player));
@@ -70,8 +74,11 @@ class Game {
     } {
       oldState.remove(player);
       newState.add(player);
-      playerLocations.put(player, newLocation);
+
       player.notify(newLocation.getDescription)
+      player.notify(newState.getDescription)
+
+      playerLocations.put(player, newLocation);
     }
   }
 
@@ -86,6 +93,17 @@ class Game {
       oldState.remove(foe);
       newState.add(foe);
       foeLocations.put(foe, newLocation);
+    }
+  }
+
+  def take(player: Player, itemName: String) {
+    for {
+      location <- playerLocations.get(player)
+      state <- worldMap.get(location)
+      item <- state.getItemWithName(itemName)
+    } {
+      player.addItem(item);
+      state.remove(item);
     }
   }
 }

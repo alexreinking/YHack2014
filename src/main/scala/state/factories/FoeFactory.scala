@@ -7,6 +7,7 @@ import state.{ Foe, Game };
 
 class FoeFactory {
   def buildDragon(game: Game): Foe = new Foe(
+    name = "Dragon",
     game = game,
     maxHealth = 200,
     basePower = 30,
@@ -16,6 +17,7 @@ class FoeFactory {
   );
  
   def buildTroll(game: Game): Foe = new Foe(
+    name = "Troll",
     game = game,
     maxHealth = 75,
     nature = Defensive,
@@ -23,6 +25,7 @@ class FoeFactory {
   );
   
   def buildAssassin(game: Game): Foe = new Foe(
+    name = "Assassin",
     game = game,
     maxHealth = 80,
     nature = Aggressive,
@@ -30,6 +33,7 @@ class FoeFactory {
   );
   
   def buildGnome(game: Game): Foe = new Foe(
+    name = "Gnome",
     game = game,
     maxHealth = 50,
     nature = Passive,
