@@ -6,22 +6,16 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class LocationState {
-    private Set<Player> players;
-    private Set<Foe> foes;
-    private Set<Item> items;
-
-    public LocationState() {
-        Set<Player> players = new HashSet<>();
-        Set<Foe> foes = new HashSet<>();
-        Set<Item> items = new HashSet<>();
-    }
+    private final Set<Player> players = new HashSet<>();
+    private final Set<Foe> foes = new HashSet<>();
+    private final Set<Item> items = new HashSet<>();
 
     public void add(Player player) {
-        players.add(player);
         for (Player p : players) {
             p.notify(player + " has entered the room.",
                 MessageType.Notification);
         }
+        players.add(player);
     }
 
     public void add(Foe foe) {

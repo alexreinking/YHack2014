@@ -76,6 +76,11 @@ public class CommandParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof CommandListener ) ((CommandListener)listener).exitCommand(this);
 		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof CommandVisitor ) return ((CommandVisitor<? extends T>)visitor).visitCommand(this);
+			else return visitor.visitChildren(this);
+		}
 	}
 
 	public final CommandContext command() throws RecognitionException {
@@ -132,6 +137,11 @@ public class CommandParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof CommandListener ) ((CommandListener)listener).exitSpecificCommand(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof CommandVisitor ) return ((CommandVisitor<? extends T>)visitor).visitSpecificCommand(this);
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -236,6 +246,11 @@ public class CommandParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof CommandListener ) ((CommandListener)listener).exitMovement(this);
 		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof CommandVisitor ) return ((CommandVisitor<? extends T>)visitor).visitMovement(this);
+			else return visitor.visitChildren(this);
+		}
 	}
 
 	public final MovementContext movement() throws RecognitionException {
@@ -298,6 +313,11 @@ public class CommandParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof CommandListener ) ((CommandListener)listener).exitRelativeMovement(this);
 		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof CommandVisitor ) return ((CommandVisitor<? extends T>)visitor).visitRelativeMovement(this);
+			else return visitor.visitChildren(this);
+		}
 	}
 
 	public final RelativeMovementContext relativeMovement() throws RecognitionException {
@@ -350,6 +370,11 @@ public class CommandParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof CommandListener ) ((CommandListener)listener).exitSpecificMovement(this);
 		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof CommandVisitor ) return ((CommandVisitor<? extends T>)visitor).visitSpecificMovement(this);
+			else return visitor.visitChildren(this);
+		}
 	}
 
 	public final SpecificMovementContext specificMovement() throws RecognitionException {
@@ -399,6 +424,11 @@ public class CommandParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof CommandListener ) ((CommandListener)listener).exitDirection(this);
 		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof CommandVisitor ) return ((CommandVisitor<? extends T>)visitor).visitDirection(this);
+			else return visitor.visitChildren(this);
+		}
 	}
 
 	public final DirectionContext direction() throws RecognitionException {
@@ -445,6 +475,11 @@ public class CommandParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof CommandListener ) ((CommandListener)listener).exitInspection(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof CommandVisitor ) return ((CommandVisitor<? extends T>)visitor).visitInspection(this);
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -510,6 +545,11 @@ public class CommandParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof CommandListener ) ((CommandListener)listener).exitInteraction(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof CommandVisitor ) return ((CommandVisitor<? extends T>)visitor).visitInteraction(this);
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -613,6 +653,11 @@ public class CommandParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof CommandListener ) ((CommandListener)listener).exitAttack(this);
 		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof CommandVisitor ) return ((CommandVisitor<? extends T>)visitor).visitAttack(this);
+			else return visitor.visitChildren(this);
+		}
 	}
 
 	public final AttackContext attack() throws RecognitionException {
@@ -666,6 +711,11 @@ public class CommandParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof CommandListener ) ((CommandListener)listener).exitGift(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof CommandVisitor ) return ((CommandVisitor<? extends T>)visitor).visitGift(this);
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -728,6 +778,11 @@ public class CommandParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof CommandListener ) ((CommandListener)listener).exitInventory(this);
 		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof CommandVisitor ) return ((CommandVisitor<? extends T>)visitor).visitInventory(this);
+			else return visitor.visitChildren(this);
+		}
 	}
 
 	public final InventoryContext inventory() throws RecognitionException {
@@ -778,6 +833,11 @@ public class CommandParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof CommandListener ) ((CommandListener)listener).exitCheck(this);
 		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof CommandVisitor ) return ((CommandVisitor<? extends T>)visitor).visitCheck(this);
+			else return visitor.visitChildren(this);
+		}
 	}
 
 	public final CheckContext check() throws RecognitionException {
@@ -826,6 +886,11 @@ public class CommandParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof CommandListener ) ((CommandListener)listener).exitCheckHealth(this);
 		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof CommandVisitor ) return ((CommandVisitor<? extends T>)visitor).visitCheckHealth(this);
+			else return visitor.visitChildren(this);
+		}
 	}
 
 	public final CheckHealthContext checkHealth() throws RecognitionException {
@@ -871,6 +936,11 @@ public class CommandParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof CommandListener ) ((CommandListener)listener).exitCheckStatus(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof CommandVisitor ) return ((CommandVisitor<? extends T>)visitor).visitCheckStatus(this);
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -919,6 +989,11 @@ public class CommandParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof CommandListener ) ((CommandListener)listener).exitLongName(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof CommandVisitor ) return ((CommandVisitor<? extends T>)visitor).visitLongName(this);
+			else return visitor.visitChildren(this);
 		}
 	}
 

@@ -7,23 +7,23 @@ import server.messages.UpdateMessage
 trait Notifiable {
   protected val session: Session
 
-  protected def sendSuccess(message: String) {
+  def sendSuccess(message: String) {
     notify(message, Success)
   }
 
-  protected def sendFailure(message: String) {
+  def sendFailure(message: String) {
     notify(message, Failure)
   }
 
-  protected def alert(message: String) {
+  def alert(message: String) {
     notify(message, Alert)
   }
 
-  protected def warn(message: String) {
+  def warn(message: String) {
     notify("[Warning] " + message, Warning)
   }
 
-  protected def notify(message: String, messageType: MessageType = Notification): Unit = {
+  def notify(message: String, messageType: MessageType = Notification): Unit = {
     session.getBasicRemote.sendObject(new UpdateMessage(message, messageType))
   }
 }
