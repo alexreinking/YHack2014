@@ -26,22 +26,17 @@ class Game {
   ): Boolean = (for {
     oldState <- worldMap.get(oldLocation)
     newState <- worldMap.get(newLocation)
-  } yield {
-    mover match {
-      case player: Player =>
-        if (oldState.contains(player)) {
-          oldState.remove(player);
-          newState.add(player);
-          true;
-        }
-      case foe: Foe =>
-        if (oldState.contains(foe)) {
-          oldState.remove(foe);
-          newState.add(foe);
-          true;
-        }
-      case _ =>
+  } yield mover match {
+    case player: Player if oldState.contains(player) => {
+      oldState.remove(player);
+      newState.add(player);
+      true;
     }
-    false;
+    case foe: Foe if oldState.contains(foe) => {
+      oldState.remove(foe);
+      newState.add(foe);
+      true;
+    }
+    case _ => false;
   }).getOrElse(false);
 }

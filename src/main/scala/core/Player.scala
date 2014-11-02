@@ -51,10 +51,10 @@ class Player(
   }
 
   protected def wasHitBy(
-                          enemy: Attackable,
-                          damage: Int,
-                          weaponNameOpt: Option[String]
-                          ) {
+    enemy: Attackable,
+    damage: Int,
+    weaponNameOpt: Option[String]
+  ) {
     val withClause = weaponNameOpt.map(" with " + addArticle(_)).getOrElse("")
     alert(enemy + " attacked you" + withClause + "! (-" + damage + ")")
   }
