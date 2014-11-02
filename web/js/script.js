@@ -15,11 +15,16 @@ function escapeHtml(string) {
 }
 
 var wsocket = null;
+var log;
 
 $(function () {
     var $command = $("#command");
     var $log = $(".log");
     var loggedIn = false;
+    var requestMade = false;
+    var lastCommand = "";
+
+    log = function (level, message) { $log.append($("<div class='log-line log-" + level + "'>").text(message)); }
 
     wsocket = new WebSocket('ws://' + document.location.host + document.location.pathname + 'game/global');
 
@@ -28,15 +33,15 @@ $(function () {
         if (resp.hasOwnProperty("update")) {
             loggedIn = true;
             $("#command-label").html("&gt;&gt;&gt;&nbsp;");
-            var classForType = 'log-Notification';
-            if (resp.hasOwnProperty("type"))
-                classForType = 'log-' + resp.type;
-            $log.append($("<div class='log-line " + classForType + "'>").text(resp.update));
-
+            log(resp.type || 'Notification', resp.update);
         } else if (resp.hasOwnProperty("error")) {
-            $log.append($("<div class='log-line log-fatal'>").text(resp.error));
+            log('Fatal', resp.error);
         } else if (resp.hasOwnProperty("request")) {
-            // open a modal
+            log('Failure', "You must choose from the following options:");
+            var options = resp.options;
+            for (var i = 0; i < options.length; i++)
+                log('Failure', "(" + (i + 1) + ") " + options[i]);
+            requestMade = true;
         }
         console.log(e);
         $log.scrollTop($log.height());
@@ -44,10 +49,22 @@ $(function () {
 
     $command.keyup(function (e) {
         if (e.keyCode === 13) {
-            if (loggedIn)
+            if (requestMade) {
+                var selection = parseInt($command.val());
+                if (!isNaN(selection)) {
+                    var data = JSON.stringify({ cmd: lastCommand + " " + (selection - 1) });
+                    wsocket.send(data);
+                    requestMade = false;
+                } else {
+                    log('Fatal', 'You must enter a number');
+                }
+            } else if (loggedIn) {
+                lastCommand = $command.val();
                 wsocket.send(JSON.stringify({ cmd: $command.val() }));
-            else
+            } else {
                 wsocket.send(JSON.stringify({ login: $command.val() }));
+            }
+
             $command.val("");
         }
     });
