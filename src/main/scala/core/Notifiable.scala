@@ -1,8 +1,7 @@
-package core
-
-import javax.websocket.Session
+package core;
 
 import core.MessageType.{Notification, Success, Failure, Warning, Alert}
+import javax.websocket.Session
 import server.messages.UpdateMessage
 
 trait Notifiable {

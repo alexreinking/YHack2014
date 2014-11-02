@@ -1,9 +1,7 @@
-package location;
+package state;
 
-import core.Foe;
 import core.Item;
 import core.MessageType;
-import core.Player;
 import java.util.HashSet;
 import java.util.Set;
 

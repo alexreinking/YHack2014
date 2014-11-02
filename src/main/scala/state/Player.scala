@@ -1,18 +1,17 @@
-package core
+package state;
 
-import javax.websocket.Session
+import battle.Attackable;
+import core.{ HasName, Item, Notifiable };
+import javax.websocket.Session;
+import scala.collection.JavaConverters._;
+import server.messages.RequestMessage;
+import utils.StringUtils.addArticle;
 
-import battle.Attackable
-import location.Location
-import server.messages.RequestMessage
-import utils.Strings.addArticle
-import scala.collection.JavaConverters._
-
-class Player(val name: String,
-             val session: Session,
-             val game: Game,
-             protected var _location: Location
-              ) extends Attackable with Notifiable with Movable with HasName {
+class Player(
+  val name: String,
+  val session: Session,
+  val game: Game
+) extends Attackable with Notifiable with HasName {
   val maxHealth = 100
   val basePower = 5
   val baseAccuracy = 100

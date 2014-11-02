@@ -1,4 +1,6 @@
-package battle;
+package battle.factories;
+
+import battle.Weapon;
 
 object WeaponFactory {
   def buildBronzeSword(decayCallbackOpt: Option[() => Unit]) = new Weapon(

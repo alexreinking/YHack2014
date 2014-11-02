@@ -2,6 +2,7 @@ package location;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 public abstract class Location {
     protected Map <String, Location> neighbors;
@@ -14,22 +15,20 @@ public abstract class Location {
         neighbors.put(direction.toLowerCase(), neighbor);
     }
 
-    public boolean canGoTo(String direction) {
-        return goTo(direction) != null;
-    }
-
-    public Location goTo(String direction){
+    public Optional<Location> getNeighbor(String direction){
+        String directionToCheck = null;
         if (direction.toLowerCase().contains("north")) {
-            return neighbors.get("north");
+            directionToCheck = "north";
         } else if (direction.toLowerCase().contains("south")){
-            return neighbors.get("south");
+            directionToCheck = "south";
         } else if (direction.toLowerCase().contains("east")) {
-            return neighbors.get("east");
+            directionToCheck = "east";
         } else if (direction.toLowerCase().contains("west")) {
-            return neighbors.get("west");
+            directionToCheck = "west";
         } else {
-            return neighbors.get(direction.toLowerCase());
+            directionToCheck = direction.toLowerCase();
         }
+        return Optional.ofNullable(neighbors.get(directionToCheck));
     }
 
     public abstract String getDescription();

@@ -1,9 +1,6 @@
 package battle;
 
-import core.Game;
-
 trait Attackable {
-  val game: Game;
   val baseAccuracy: Int;
   val basePower: Int;
   val maxHealth: Int;
