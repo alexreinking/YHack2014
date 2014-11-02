@@ -54,13 +54,14 @@ public class GameWebSocket {
                 CommandParser.CommandContext parsedCommand = parser.command();
 
                 if (parser.getNumberOfSyntaxErrors() != 0) {
-                    player.getBasicRemote().sendObject(new ErrorMessage("Malformed command"));
+                    String error = String.format("Unknown command '%s'", message.argument());
+                    player.getBasicRemote().sendObject(new ErrorMessage(error));
                     return;
                 }
 
                 player.getBasicRemote().sendObject(new UpdateMessage("Parsed successfully!", MessageType.Notification));
             } else {
-                player.getBasicRemote().sendObject(new ErrorMessage("Bad message"));
+                player.getBasicRemote().sendObject(new ErrorMessage("[FATAL] Invalid message sent to server"));
             }
         } catch (EncodeException | IOException e) {
             System.out.println(e.getMessage());
