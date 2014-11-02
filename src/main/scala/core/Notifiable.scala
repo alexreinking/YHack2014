@@ -2,7 +2,7 @@ package core;
 
 import core.MessageType.{Notification, Success, Failure, Warning, Alert}
 import javax.websocket.Session
-import server.messages.UpdateMessage
+import server.messages.{ErrorMessage, UpdateMessage}
 
 trait Notifiable {
   protected val session: Session
@@ -21,6 +21,10 @@ trait Notifiable {
 
   def warn(message: String) {
     notify("[Warning] " + message, Warning)
+  }
+
+  def sendError(message: String): Unit = {
+    session.getBasicRemote.sendObject(new ErrorMessage(message))
   }
 
   def notify(message: String, messageType: MessageType = Notification): Unit = {

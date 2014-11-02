@@ -53,13 +53,10 @@ public class GameWebSocket {
                 CommandParser parser = new CommandParser(new BufferedTokenStream(lexer));
                 CommandParser.CommandContext parsedCommand = parser.command();
 
-                if (parser.getNumberOfSyntaxErrors() != 0) {
-                    String error = String.format("Unknown command '%s'", message.argument());
-                    playerSession.getBasicRemote().sendObject(new ErrorMessage(error));
-                    return;
-                }
-
-                CommandRunner.execute(currentGame, player, parsedCommand);
+                if (parser.getNumberOfSyntaxErrors() != 0)
+                    player.sendError(String.format("Unknown command '%s'", message.argument()));
+                else
+                    CommandRunner.execute(currentGame, player, parsedCommand);
             } else {
                 playerSession.getBasicRemote().sendObject(new ErrorMessage("[FATAL] Invalid message sent to server"));
             }
