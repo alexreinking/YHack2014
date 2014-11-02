@@ -14,10 +14,10 @@ specificCommand
 
 movement : relativeMovement | specificMovement ;
 relativeMovement : (Go | Walk)? direction ;
-specificMovement : (Enter | Exit) Identifier ;
+specificMovement : (Enter | Exit) longName ;
 direction : North | South | East | West | Up | Down | Leave ;
 
-inspection : (Look 'at' | Inspect | Examine) longName ;
+inspection : (Look 'at' | Inspect | Examine | Open) longName ;
 
 interaction : Touch longName
             | Pick 'up' longName

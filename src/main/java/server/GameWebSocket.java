@@ -2,12 +2,12 @@ package server;
 
 import antlr.CommandLexer;
 import antlr.CommandParser;
-import core.MessageType;
-import location.Location;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.BufferedTokenStream;
-import scala.collection.*;
-import server.messages.*;
+import server.messages.CommandMessage;
+import server.messages.ErrorMessage;
+import server.messages.GameMessage;
+import server.messages.LoginMessage;
 import state.CommandRunner;
 import state.Game;
 import state.Player;
@@ -20,7 +20,6 @@ import java.util.Collections;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.CopyOnWriteArraySet;
 
 @ServerEndpoint(value = "/game/{lobby}", decoders = GameDecoder.class, encoders = GameEncoder.class)
 public class GameWebSocket {
@@ -38,7 +37,7 @@ public class GameWebSocket {
             Game currentGame = lobbies.get(lobby);
 
             if (message instanceof LoginMessage) {
-                if(isLoggedIn(playerSession)) {
+                if (isLoggedIn(playerSession)) {
                     playerSession.getBasicRemote().sendObject(new ErrorMessage("already logged in"));
                     return;
                 }
@@ -46,12 +45,8 @@ public class GameWebSocket {
                 String possibleName = message.argument();
                 boolean success = currentGame.addPlayer(possibleName, playerSession);
 
-                if (!success) {
+                if (!success)
                     playerSession.getBasicRemote().sendObject(new ErrorMessage(possibleName + " is already taken."));
-                } else {
-                    Player player = (Player) playerSession.getUserProperties().get("player");
-                    player.notify("You have logged in as " + possibleName + "!", MessageType.Notification);
-                }
             } else if (isLoggedIn(playerSession) && message instanceof CommandMessage) {
                 Player player = (Player) playerSession.getUserProperties().get("player");
 
