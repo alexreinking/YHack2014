@@ -24,17 +24,37 @@ class CommandRunner(gameRoom: Game, issuingPlayer: Player) extends CommandBaseVi
 
     if (ctx.Drop() != null) {
       issuingPlayer.dropItem(longName, if (ctx.Number() != null) Some(ctx.Number().getText.toInt) else None)
-    } else if(ctx.Eat() != null) {
-
-    } else if(ctx.Touch() != null) {
-
-    } else if(ctx.Take() != null) {
+    } else if (ctx.Eat() != null) {
+      gameRoom.eat(issuingPlayer, longName);
+    } else if (ctx.Touch() != null) {
+      gameRoom.touch(issuingPlayer, longName);
+    } else if (ctx.Take() != null || ctx.Pick() != null) {
       gameRoom.take(issuingPlayer, longName);
-    } else if(ctx.Pick() != null) {
-
     }
 
     super.visitInteraction(ctx)
+  }
+
+
+  override def visitAttack(ctx: AttackContext): Void = {
+    val target = ctx.longName(0)
+    val weapon = Option(ctx.longName(1))
+
+    gameRoom.attack(issuingPlayer, target, weapon)
+
+    super.visitAttack(ctx)
+  }
+
+  override def visitInspection(ctx: InspectionContext): Void = {
+    val longName = joinLongName(ctx.longName())
+
+    if (ctx.Look() != null || ctx.Examine() != null || ctx.Inspect() != null) {
+      gameRoom.lookAt(issuingPlayer, longName);
+    } else if (ctx.Open() != null) {
+      gameRoom.open(issuingPlayer, longName);
+    }
+
+    super.visitInspection(ctx)
   }
 
   override def visitSpecificMovement(ctx: SpecificMovementContext): Void = {
