@@ -28,9 +28,13 @@ $(function () {
         if(resp.hasOwnProperty("update")) {
             loggedIn = true;
             $("#command-label").html("&gt;&gt;&gt;&nbsp;");
-            $log.append($("<div class='log-line'>").text(resp.update));
+            var classForType = 'log-Notification';
+            if (resp.hasOwnProperty("type"))
+                classForType = 'log-' + resp.type;
+            $log.append($("<div class='log-line " + classForType + "'>").text(resp.update));
+
         } else if (resp.hasOwnProperty("error")) {
-            $log.append($("<div class='log-error'>").text(resp.error));
+            $log.append($("<div class='log-line log-fatal'>").text(resp.error));
         }
         console.log(e);
         $log.scrollTop($log.height());
