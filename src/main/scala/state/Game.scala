@@ -1,10 +1,12 @@
 package state;
 
+import battle.Weapon
 import core.Item
 import location.{Room, Location}
 import javax.websocket.Session;
 import scala.util.Random;
 import utils.OptionUtils.optional2Option;
+import utils.StringUtils.addArticle;
 
 class Game {
   private val (worldMap, startingLocations) = initializeMap;
@@ -106,4 +108,45 @@ class Game {
       state.remove(item);
     }
   }
+
+  def eat(player: Player, target: String) {
+    player.notify("Well that's just preposterous.");
+  }
+
+  def attack(player: Player, targetName: String, weaponNameOpt: Option[String]) {
+    for {
+      location <- playerLocations.get(player)
+      state <- worldMap.get(location)
+      target <- state.getPlayerWithName(targetName)
+    } {
+      val weaponOpt = weaponNameOpt.flatMap(weaponName => {
+        player.inventory.find(item => item.name.equalsIgnoreCase(weaponName)
+          && item.isInstanceOf[Weapon])
+      });
+      player.attack(target, weaponOpt.asInstanceOf[Option[Weapon]]);
+    }
+  }
+
+  def lookAt(player: Player, targetName: String) {
+    for {
+      location <- playerLocations.get(player)
+      state <- worldMap.get(location)
+    } {
+      state.getPlayerWithName(targetName).foreach(target => {
+        player.notify("That's " + target.name + ".");
+      });
+      state.getFoeWithName(targetName).foreach(target => {
+        player.notify("It's " + addArticle(target.name) + ".");
+      });
+      state.getItemWithName(targetName).foreach(target => {
+        player.notify("It's " + addArticle(target.name) + ". " +
+          target.description);
+      });
+    }
+  }
+
+  def open(player: Player, target: String) {
+    player.notify("You haven't taught me how to open anything yet!");
+  }
+
 }

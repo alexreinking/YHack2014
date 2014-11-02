@@ -26,8 +26,6 @@ class CommandRunner(gameRoom: Game, issuingPlayer: Player) extends CommandBaseVi
       issuingPlayer.dropItem(longName, if (ctx.Number() != null) Some(ctx.Number().getText.toInt) else None)
     } else if (ctx.Eat() != null) {
       gameRoom.eat(issuingPlayer, longName);
-    } else if (ctx.Touch() != null) {
-      gameRoom.touch(issuingPlayer, longName);
     } else if (ctx.Take() != null || ctx.Pick() != null) {
       gameRoom.take(issuingPlayer, longName);
     }
@@ -37,8 +35,8 @@ class CommandRunner(gameRoom: Game, issuingPlayer: Player) extends CommandBaseVi
 
 
   override def visitAttack(ctx: AttackContext): Void = {
-    val target = ctx.longName(0)
-    val weapon = Option(ctx.longName(1))
+    val target = joinLongName(ctx.longName(0))
+    val weapon = Option(joinLongName(ctx.longName(1)))
 
     gameRoom.attack(issuingPlayer, target, weapon)
 
