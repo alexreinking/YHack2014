@@ -25,7 +25,7 @@ $(function () {
 
     wsocket.onmessage = function (e) {
         var resp = JSON.parse(e.data);
-        if(resp.hasOwnProperty("update")) {
+        if (resp.hasOwnProperty("update")) {
             loggedIn = true;
             $("#command-label").html("&gt;&gt;&gt;&nbsp;");
             var classForType = 'log-Notification';
@@ -35,6 +35,8 @@ $(function () {
 
         } else if (resp.hasOwnProperty("error")) {
             $log.append($("<div class='log-line log-fatal'>").text(resp.error));
+        } else if (resp.hasOwnProperty("request")) {
+            // open a modal
         }
         console.log(e);
         $log.scrollTop($log.height());
@@ -52,7 +54,7 @@ $(function () {
 
     function loadPage(pg) {
         $('.panel').removeClass('showing');
-        if(pg !== "") $(pg).addClass('showing');
+        if (pg !== "") $(pg).addClass('showing');
         window.location.hash = pg;
     }
 

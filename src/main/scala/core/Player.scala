@@ -1,25 +1,28 @@
 package core
 
-import battle.Attackable;
-import location.Location;
 import javax.websocket.Session
-import utils.Strings.addArticle;
 
-class Player(
-  val name: String,
-  val session: Session,
-  val game: Game,
-  protected var _location: Location
-) extends Attackable with Notifiable with Movable with HasName {
-  private val _inventory = scala.collection.mutable.ListBuffer.empty[Item];
-  val maxHealth = 100;
-  val basePower = 5;
-  val baseAccuracy = 100;
-  def inventory = _inventory.toList;
+import battle.Attackable
+import location.Location
+import server.messages.RequestMessage
+import utils.Strings.addArticle
+import scala.collection.JavaConverters._
+
+class Player(val name: String,
+             val session: Session,
+             val game: Game,
+             protected var _location: Location
+              ) extends Attackable with Notifiable with Movable with HasName {
+  val maxHealth = 100
+  val basePower = 5
+  val baseAccuracy = 100
+  private val _inventory = scala.collection.mutable.ListBuffer.empty[Item]
+
   def giveItem(player: Player, itemName: String, indexOpt: Option[Int] = None) {
     val matchingItems = indexOpt
       .map(index => inventory.filter(_.name == itemName).lift(index).toList)
       .getOrElse(inventory.filter(_.name == itemName))
+
     if (matchingItems.isEmpty) {
       sendFailure("You don't have " + addArticle(itemName) + " to trade.")
     } else if (matchingItems.size == 1) {
@@ -34,8 +37,10 @@ class Player(
     }
   }
 
+  def inventory = _inventory.toList
+
   private def sendItemSpecificationRequest(player: Player, items: List[Item]) {
-    // web hook to request specification
+    session.getBasicRemote.sendObject(new RequestMessage("choose", items.map(_.name).asJava, -1))
   }
 
   protected def hit(enemy: Attackable) {
@@ -65,7 +70,7 @@ class Player(
   }
 
   protected def wasKilled() {
-    alert("Oh dear.  It seems you have died.")
+    alert("Oh dear. It seems you have died.")
     game.killPlayer(this)
   }
 

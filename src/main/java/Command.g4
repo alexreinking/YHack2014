@@ -27,7 +27,7 @@ interaction : Touch longName
             ;
 
 attack : Attack longName (With longName)? ;
-gift :  Give Identifier ('the' | 'my' | 'a')? longName ;
+gift :  Give Identifier ('the' | 'my' | 'a')? longName Number? ;
 
 inventory : Open? Inventory ;
 
@@ -66,6 +66,7 @@ Walk: 'walk';
 With: 'with';
 West: 'west' | 'w';
 
+Number: [0-9][0-9]* ;
 Identifier: [A-Za-z][A-Za-z0-9]* ;
 
 WS: [ \n\t\r]+ -> skip;
