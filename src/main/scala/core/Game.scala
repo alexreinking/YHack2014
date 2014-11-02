@@ -15,7 +15,7 @@ class Game {
 
   private def initializeRooms: Map[Location, LocationState] = {
     // initialize the dungeon's rooms here.
-    return Map.empty[Location, LocationState];
+    Map.empty[Location, LocationState];
   }
 
   // Should not be directly invoked.  Use the mover's own move() method.
@@ -27,18 +27,20 @@ class Game {
     oldState <- worldMap.get(oldLocation)
     newState <- worldMap.get(newLocation)
   } yield {
-    if (mover.isInstanceOf[Player]) {
-      if (oldState.contains(mover.asInstanceOf[Player])) {
-        oldState.remove(mover.asInstanceOf[Player]);
-        newState.add(mover.asInstanceOf[Player]);
-        true;
-      }
-    } else if (mover.isInstanceOf[Foe]) {
-      if (oldState.contains(mover.asInstanceOf[Foe])) {
-        oldState.remove(mover.asInstanceOf[Foe]);
-        newState.add(mover.asInstanceOf[Foe]);
-        true;
-      }
+    mover match {
+      case player: Player =>
+        if (oldState.contains(player)) {
+          oldState.remove(player);
+          newState.add(player);
+          true;
+        }
+      case foe: Foe =>
+        if (oldState.contains(foe)) {
+          oldState.remove(foe);
+          newState.add(foe);
+          true;
+        }
+      case _ =>
     }
     false;
   }).getOrElse(false);
