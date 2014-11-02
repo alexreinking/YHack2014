@@ -2,15 +2,17 @@ package core;
 
 import battle.{ Attackable, FightingNature, Weapon }
 import battle.FightingNature.{ Passive, Defensive, Aggressive }
+import location.Location;
 
 class Foe(
   val game: Game,
+  protected var _location: Location,
   val maxHealth: Int,
   val basePower: Int = 5,
   val baseAccuracy: Int = 100,
   val nature: FightingNature = Defensive,
   val weaponOpt: Option[Weapon] = None
-) extends Attackable {
+) extends Attackable with Movable {
   protected def hit(enemy: Attackable) { }
   protected def missed(enemy: Attackable) { }
   protected def killed(enemy: Attackable) { }

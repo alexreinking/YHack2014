@@ -14,21 +14,21 @@ public abstract class Location {
         neighbors.put(direction.toLowerCase(), neighbor);
     }
 
-    public Location goTo(String locationName){
-        if (locationName.toLowerCase().contains("north")) {
+    public boolean canGoTo(String direction) {
+        return goTo(direction) != null;
+    }
+
+    public Location goTo(String direction){
+        if (direction.toLowerCase().contains("north")) {
             return neighbors.get("north");
-        }
-        else if (locationName.toLowerCase().contains("south")){
+        } else if (direction.toLowerCase().contains("south")){
             return neighbors.get("south");
-        }
-        else if (locationName.toLowerCase().contains("east")) {
+        } else if (direction.toLowerCase().contains("east")) {
             return neighbors.get("east");
-        }
-        else if (locationName.toLowerCase().contains("west")) {
+        } else if (direction.toLowerCase().contains("west")) {
             return neighbors.get("west");
-        }
-        else {
-            return this;
+        } else {
+            return neighbors.get(direction.toLowerCase());
         }
     }
 

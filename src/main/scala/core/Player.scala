@@ -1,16 +1,19 @@
 package core;
 
 import battle.Attackable;
+import location.Location;
 import utils.Strings.addArticle;
 
-class Player(val name: String, val game: Game)
-extends Attackable with Notifiable with HasName {
+class Player(
+  val name: String,
+  val game: Game,
+  protected var _location: Location
+) extends Attackable with Notifiable with Movable with HasName {
   private val _inventory = scala.collection.mutable.ListBuffer.empty[Item];
   val maxHealth = 100;
   val basePower = 5;
   val baseAccuracy = 100;
   def inventory = _inventory.toList;
-  def currentLocation = game.getCurrentLocation(this);
   def giveItem(player: Player, itemName: String, indexOpt: Option[Int] = None) {
     val matchingItems = indexOpt
       .map(index => inventory.filter(_.name == itemName).lift(index).toList)
