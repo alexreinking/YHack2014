@@ -130,7 +130,7 @@ html, body {
     color: red;
 }
 
-.log-fatal {
+.log-Fatal {
     background-color: red;
     color: black;
 }

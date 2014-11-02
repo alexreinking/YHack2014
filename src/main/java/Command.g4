@@ -22,12 +22,12 @@ inspection : (Look 'at' | Inspect | Examine) longName ;
 interaction : Touch longName
             | Pick 'up' longName
             | Take longName
-            | Drop longName
+            | Drop ('the' | 'my' | 'a')? longName Number?
             | Eat longName
             ;
 
 attack : Attack longName (With longName)? ;
-gift :  Give Identifier ('the' | 'my' | 'a')? longName Number? ;
+gift :  Give longName ('the' | 'my' | 'a')? longName Number? ;
 
 inventory : Open? Inventory ;
 
