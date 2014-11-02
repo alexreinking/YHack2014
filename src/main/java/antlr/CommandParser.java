@@ -76,6 +76,11 @@ public class CommandParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof CommandListener ) ((CommandListener)listener).exitCommand(this);
 		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof CommandVisitor ) return ((CommandVisitor<? extends T>)visitor).visitCommand(this);
+			else return visitor.visitChildren(this);
+		}
 	}
 
 	public final CommandContext command() throws RecognitionException {
@@ -133,6 +138,11 @@ public class CommandParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof CommandListener ) ((CommandListener)listener).exitSpecificCommand(this);
 		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof CommandVisitor ) return ((CommandVisitor<? extends T>)visitor).visitSpecificCommand(this);
+			else return visitor.visitChildren(this);
+		}
 	}
 
 	public final SpecificCommandContext specificCommand() throws RecognitionException {
@@ -140,70 +150,49 @@ public class CommandParser extends Parser {
 		enterRule(_localctx, 2, RULE_specificCommand);
 		try {
 			setState(40);
-			switch (_input.LA(1)) {
-			case Down:
-			case East:
-			case Enter:
-			case Exit:
-			case Go:
-			case Leave:
-			case North:
-			case South:
-			case Up:
-			case Walk:
-			case West:
+			switch ( getInterpreter().adaptivePredict(_input,0,_ctx) ) {
+			case 1:
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(33); movement();
 				}
 				break;
-			case Examine:
-			case Inspect:
-			case Look:
+			case 2:
 				enterOuterAlt(_localctx, 2);
 				{
 				setState(34); inspection();
 				}
 				break;
-			case Drop:
-			case Eat:
-			case Pick:
-			case Take:
-			case Touch:
+			case 3:
 				enterOuterAlt(_localctx, 3);
 				{
 				setState(35); interaction();
 				}
 				break;
-			case Attack:
+			case 4:
 				enterOuterAlt(_localctx, 4);
 				{
 				setState(36); attack();
 				}
 				break;
-			case Give:
+			case 5:
 				enterOuterAlt(_localctx, 5);
 				{
 				setState(37); gift();
 				}
 				break;
-			case Inventory:
-			case Open:
+			case 6:
 				enterOuterAlt(_localctx, 6);
 				{
 				setState(38); inventory();
 				}
 				break;
-			case Check:
-			case Health:
-			case Status:
+			case 7:
 				enterOuterAlt(_localctx, 7);
 				{
 				setState(39); check();
 				}
 				break;
-			default:
-				throw new NoViableAltException(this);
 			}
 		}
 		catch (RecognitionException re) {
@@ -235,6 +224,11 @@ public class CommandParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof CommandListener ) ((CommandListener)listener).exitMovement(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof CommandVisitor ) return ((CommandVisitor<? extends T>)visitor).visitMovement(this);
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -298,6 +292,11 @@ public class CommandParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof CommandListener ) ((CommandListener)listener).exitRelativeMovement(this);
 		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof CommandVisitor ) return ((CommandVisitor<? extends T>)visitor).visitRelativeMovement(this);
+			else return visitor.visitChildren(this);
+		}
 	}
 
 	public final RelativeMovementContext relativeMovement() throws RecognitionException {
@@ -335,7 +334,9 @@ public class CommandParser extends Parser {
 	}
 
 	public static class SpecificMovementContext extends ParserRuleContext {
-		public TerminalNode Identifier() { return getToken(CommandParser.Identifier, 0); }
+		public LongNameContext longName() {
+			return getRuleContext(LongNameContext.class,0);
+		}
 		public TerminalNode Enter() { return getToken(CommandParser.Enter, 0); }
 		public TerminalNode Exit() { return getToken(CommandParser.Exit, 0); }
 		public SpecificMovementContext(ParserRuleContext parent, int invokingState) {
@@ -349,6 +350,11 @@ public class CommandParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof CommandListener ) ((CommandListener)listener).exitSpecificMovement(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof CommandVisitor ) return ((CommandVisitor<? extends T>)visitor).visitSpecificMovement(this);
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -365,7 +371,7 @@ public class CommandParser extends Parser {
 			_errHandler.recoverInline(this);
 			}
 			consume();
-			setState(52); match(Identifier);
+			setState(52); longName();
 			}
 		}
 		catch (RecognitionException re) {
@@ -399,6 +405,11 @@ public class CommandParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof CommandListener ) ((CommandListener)listener).exitDirection(this);
 		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof CommandVisitor ) return ((CommandVisitor<? extends T>)visitor).visitDirection(this);
+			else return visitor.visitChildren(this);
+		}
 	}
 
 	public final DirectionContext direction() throws RecognitionException {
@@ -428,6 +439,7 @@ public class CommandParser extends Parser {
 	}
 
 	public static class InspectionContext extends ParserRuleContext {
+		public TerminalNode Open() { return getToken(CommandParser.Open, 0); }
 		public TerminalNode Inspect() { return getToken(CommandParser.Inspect, 0); }
 		public TerminalNode Look() { return getToken(CommandParser.Look, 0); }
 		public TerminalNode Examine() { return getToken(CommandParser.Examine, 0); }
@@ -446,6 +458,11 @@ public class CommandParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof CommandListener ) ((CommandListener)listener).exitInspection(this);
 		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof CommandVisitor ) return ((CommandVisitor<? extends T>)visitor).visitInspection(this);
+			else return visitor.visitChildren(this);
+		}
 	}
 
 	public final InspectionContext inspection() throws RecognitionException {
@@ -454,7 +471,7 @@ public class CommandParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(60);
+			setState(61);
 			switch (_input.LA(1)) {
 			case Look:
 				{
@@ -472,10 +489,15 @@ public class CommandParser extends Parser {
 				setState(59); match(Examine);
 				}
 				break;
+			case Open:
+				{
+				setState(60); match(Open);
+				}
+				break;
 			default:
 				throw new NoViableAltException(this);
 			}
-			setState(62); longName();
+			setState(63); longName();
 			}
 		}
 		catch (RecognitionException re) {
@@ -511,6 +533,11 @@ public class CommandParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof CommandListener ) ((CommandListener)listener).exitInteraction(this);
 		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof CommandVisitor ) return ((CommandVisitor<? extends T>)visitor).visitInteraction(this);
+			else return visitor.visitChildren(this);
+		}
 	}
 
 	public final InteractionContext interaction() throws RecognitionException {
@@ -518,39 +545,39 @@ public class CommandParser extends Parser {
 		enterRule(_localctx, 14, RULE_interaction);
 		int _la;
 		try {
-			setState(81);
+			setState(82);
 			switch (_input.LA(1)) {
 			case Touch:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(64); match(Touch);
-				setState(65); longName();
+				setState(65); match(Touch);
+				setState(66); longName();
 				}
 				break;
 			case Pick:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(66); match(Pick);
-				setState(67); match(Up);
-				setState(68); longName();
+				setState(67); match(Pick);
+				setState(68); match(Up);
+				setState(69); longName();
 				}
 				break;
 			case Take:
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(69); match(Take);
-				setState(70); longName();
+				setState(70); match(Take);
+				setState(71); longName();
 				}
 				break;
 			case Drop:
 				enterOuterAlt(_localctx, 4);
 				{
-				setState(71); match(Drop);
-				setState(73);
+				setState(72); match(Drop);
+				setState(74);
 				_la = _input.LA(1);
 				if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__2) | (1L << T__1) | (1L << T__0))) != 0)) {
 					{
-					setState(72);
+					setState(73);
 					_la = _input.LA(1);
 					if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__2) | (1L << T__1) | (1L << T__0))) != 0)) ) {
 					_errHandler.recoverInline(this);
@@ -559,12 +586,12 @@ public class CommandParser extends Parser {
 					}
 				}
 
-				setState(75); longName();
-				setState(77);
+				setState(76); longName();
+				setState(78);
 				_la = _input.LA(1);
 				if (_la==Number) {
 					{
-					setState(76); match(Number);
+					setState(77); match(Number);
 					}
 				}
 
@@ -573,8 +600,8 @@ public class CommandParser extends Parser {
 			case Eat:
 				enterOuterAlt(_localctx, 5);
 				{
-				setState(79); match(Eat);
-				setState(80); longName();
+				setState(80); match(Eat);
+				setState(81); longName();
 				}
 				break;
 			default:
@@ -613,6 +640,11 @@ public class CommandParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof CommandListener ) ((CommandListener)listener).exitAttack(this);
 		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof CommandVisitor ) return ((CommandVisitor<? extends T>)visitor).visitAttack(this);
+			else return visitor.visitChildren(this);
+		}
 	}
 
 	public final AttackContext attack() throws RecognitionException {
@@ -622,14 +654,14 @@ public class CommandParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(83); match(Attack);
-			setState(84); longName();
-			setState(87);
+			setState(84); match(Attack);
+			setState(85); longName();
+			setState(88);
 			_la = _input.LA(1);
 			if (_la==With) {
 				{
-				setState(85); match(With);
-				setState(86); longName();
+				setState(86); match(With);
+				setState(87); longName();
 				}
 			}
 
@@ -667,6 +699,11 @@ public class CommandParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof CommandListener ) ((CommandListener)listener).exitGift(this);
 		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof CommandVisitor ) return ((CommandVisitor<? extends T>)visitor).visitGift(this);
+			else return visitor.visitChildren(this);
+		}
 	}
 
 	public final GiftContext gift() throws RecognitionException {
@@ -676,13 +713,13 @@ public class CommandParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(89); match(Give);
-			setState(90); longName();
-			setState(92);
+			setState(90); match(Give);
+			setState(91); longName();
+			setState(93);
 			_la = _input.LA(1);
 			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__2) | (1L << T__1) | (1L << T__0))) != 0)) {
 				{
-				setState(91);
+				setState(92);
 				_la = _input.LA(1);
 				if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__2) | (1L << T__1) | (1L << T__0))) != 0)) ) {
 				_errHandler.recoverInline(this);
@@ -691,12 +728,12 @@ public class CommandParser extends Parser {
 				}
 			}
 
-			setState(94); longName();
-			setState(96);
+			setState(95); longName();
+			setState(97);
 			_la = _input.LA(1);
 			if (_la==Number) {
 				{
-				setState(95); match(Number);
+				setState(96); match(Number);
 				}
 			}
 
@@ -728,6 +765,11 @@ public class CommandParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof CommandListener ) ((CommandListener)listener).exitInventory(this);
 		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof CommandVisitor ) return ((CommandVisitor<? extends T>)visitor).visitInventory(this);
+			else return visitor.visitChildren(this);
+		}
 	}
 
 	public final InventoryContext inventory() throws RecognitionException {
@@ -737,15 +779,15 @@ public class CommandParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(99);
+			setState(100);
 			_la = _input.LA(1);
 			if (_la==Open) {
 				{
-				setState(98); match(Open);
+				setState(99); match(Open);
 				}
 			}
 
-			setState(101); match(Inventory);
+			setState(102); match(Inventory);
 			}
 		}
 		catch (RecognitionException re) {
@@ -778,24 +820,29 @@ public class CommandParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof CommandListener ) ((CommandListener)listener).exitCheck(this);
 		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof CommandVisitor ) return ((CommandVisitor<? extends T>)visitor).visitCheck(this);
+			else return visitor.visitChildren(this);
+		}
 	}
 
 	public final CheckContext check() throws RecognitionException {
 		CheckContext _localctx = new CheckContext(_ctx, getState());
 		enterRule(_localctx, 22, RULE_check);
 		try {
-			setState(105);
+			setState(106);
 			switch ( getInterpreter().adaptivePredict(_input,11,_ctx) ) {
 			case 1:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(103); checkHealth();
+				setState(104); checkHealth();
 				}
 				break;
 			case 2:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(104); checkStatus();
+				setState(105); checkStatus();
 				}
 				break;
 			}
@@ -826,6 +873,11 @@ public class CommandParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof CommandListener ) ((CommandListener)listener).exitCheckHealth(this);
 		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof CommandVisitor ) return ((CommandVisitor<? extends T>)visitor).visitCheckHealth(this);
+			else return visitor.visitChildren(this);
+		}
 	}
 
 	public final CheckHealthContext checkHealth() throws RecognitionException {
@@ -835,15 +887,15 @@ public class CommandParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(108);
+			setState(109);
 			_la = _input.LA(1);
 			if (_la==Check) {
 				{
-				setState(107); match(Check);
+				setState(108); match(Check);
 				}
 			}
 
-			setState(110); match(Health);
+			setState(111); match(Health);
 			}
 		}
 		catch (RecognitionException re) {
@@ -872,6 +924,11 @@ public class CommandParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof CommandListener ) ((CommandListener)listener).exitCheckStatus(this);
 		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof CommandVisitor ) return ((CommandVisitor<? extends T>)visitor).visitCheckStatus(this);
+			else return visitor.visitChildren(this);
+		}
 	}
 
 	public final CheckStatusContext checkStatus() throws RecognitionException {
@@ -881,15 +938,15 @@ public class CommandParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(113);
+			setState(114);
 			_la = _input.LA(1);
 			if (_la==Check) {
 				{
-				setState(112); match(Check);
+				setState(113); match(Check);
 				}
 			}
 
-			setState(115); match(Status);
+			setState(116); match(Status);
 			}
 		}
 		catch (RecognitionException re) {
@@ -920,6 +977,11 @@ public class CommandParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof CommandListener ) ((CommandListener)listener).exitLongName(this);
 		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof CommandVisitor ) return ((CommandVisitor<? extends T>)visitor).visitLongName(this);
+			else return visitor.visitChildren(this);
+		}
 	}
 
 	public final LongNameContext longName() throws RecognitionException {
@@ -929,7 +991,7 @@ public class CommandParser extends Parser {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(118); 
+			setState(119); 
 			_errHandler.sync(this);
 			_alt = 1;
 			do {
@@ -937,14 +999,14 @@ public class CommandParser extends Parser {
 				case 1:
 					{
 					{
-					setState(117); match(Identifier);
+					setState(118); match(Identifier);
 					}
 					}
 					break;
 				default:
 					throw new NoViableAltException(this);
 				}
-				setState(120); 
+				setState(121); 
 				_errHandler.sync(this);
 				_alt = getInterpreter().adaptivePredict(_input,14,_ctx);
 			} while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER );
@@ -962,38 +1024,38 @@ public class CommandParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u0430\ud6d1\u8206\uad2d\u4417\uaef1\u8d80\uaadd\3%}\4\2\t\2\4\3\t\3"+
+		"\3\u0430\ud6d1\u8206\uad2d\u4417\uaef1\u8d80\uaadd\3%~\4\2\t\2\4\3\t\3"+
 		"\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4\13\t\13\4\f"+
 		"\t\f\4\r\t\r\4\16\t\16\4\17\t\17\4\20\t\20\3\2\3\2\3\2\3\3\3\3\3\3\3\3"+
 		"\3\3\3\3\3\3\5\3+\n\3\3\4\3\4\5\4/\n\4\3\5\5\5\62\n\5\3\5\3\5\3\6\3\6"+
-		"\3\6\3\7\3\7\3\b\3\b\3\b\3\b\5\b?\n\b\3\b\3\b\3\t\3\t\3\t\3\t\3\t\3\t"+
-		"\3\t\3\t\3\t\5\tL\n\t\3\t\3\t\5\tP\n\t\3\t\3\t\5\tT\n\t\3\n\3\n\3\n\3"+
-		"\n\5\nZ\n\n\3\13\3\13\3\13\5\13_\n\13\3\13\3\13\5\13c\n\13\3\f\5\ff\n"+
-		"\f\3\f\3\f\3\r\3\r\5\rl\n\r\3\16\5\16o\n\16\3\16\3\16\3\17\5\17t\n\17"+
-		"\3\17\3\17\3\20\6\20y\n\20\r\20\16\20z\3\20\2\2\21\2\4\6\b\n\f\16\20\22"+
-		"\24\26\30\32\34\36\2\6\4\2\21\21  \4\2\r\r\17\17\t\2\t\t\13\13\25\25\27"+
-		"\27\32\32\37\37\"\"\3\2\4\6\u0085\2 \3\2\2\2\4*\3\2\2\2\6.\3\2\2\2\b\61"+
-		"\3\2\2\2\n\65\3\2\2\2\f8\3\2\2\2\16>\3\2\2\2\20S\3\2\2\2\22U\3\2\2\2\24"+
-		"[\3\2\2\2\26e\3\2\2\2\30k\3\2\2\2\32n\3\2\2\2\34s\3\2\2\2\36x\3\2\2\2"+
-		" !\5\4\3\2!\"\7\2\2\3\"\3\3\2\2\2#+\5\6\4\2$+\5\16\b\2%+\5\20\t\2&+\5"+
-		"\22\n\2\'+\5\24\13\2(+\5\26\f\2)+\5\30\r\2*#\3\2\2\2*$\3\2\2\2*%\3\2\2"+
-		"\2*&\3\2\2\2*\'\3\2\2\2*(\3\2\2\2*)\3\2\2\2+\5\3\2\2\2,/\5\b\5\2-/\5\n"+
-		"\6\2.,\3\2\2\2.-\3\2\2\2/\7\3\2\2\2\60\62\t\2\2\2\61\60\3\2\2\2\61\62"+
-		"\3\2\2\2\62\63\3\2\2\2\63\64\5\f\7\2\64\t\3\2\2\2\65\66\t\3\2\2\66\67"+
-		"\7$\2\2\67\13\3\2\2\289\t\4\2\29\r\3\2\2\2:;\7\26\2\2;?\7\3\2\2<?\7\23"+
-		"\2\2=?\7\16\2\2>:\3\2\2\2><\3\2\2\2>=\3\2\2\2?@\3\2\2\2@A\5\36\20\2A\17"+
-		"\3\2\2\2BC\7\35\2\2CT\5\36\20\2DE\7\31\2\2EF\7\37\2\2FT\5\36\20\2GH\7"+
-		"\34\2\2HT\5\36\20\2IK\7\n\2\2JL\t\5\2\2KJ\3\2\2\2KL\3\2\2\2LM\3\2\2\2"+
-		"MO\5\36\20\2NP\7#\2\2ON\3\2\2\2OP\3\2\2\2PT\3\2\2\2QR\7\f\2\2RT\5\36\20"+
-		"\2SB\3\2\2\2SD\3\2\2\2SG\3\2\2\2SI\3\2\2\2SQ\3\2\2\2T\21\3\2\2\2UV\7\7"+
-		"\2\2VY\5\36\20\2WX\7!\2\2XZ\5\36\20\2YW\3\2\2\2YZ\3\2\2\2Z\23\3\2\2\2"+
-		"[\\\7\20\2\2\\^\5\36\20\2]_\t\5\2\2^]\3\2\2\2^_\3\2\2\2_`\3\2\2\2`b\5"+
-		"\36\20\2ac\7#\2\2ba\3\2\2\2bc\3\2\2\2c\25\3\2\2\2df\7\30\2\2ed\3\2\2\2"+
-		"ef\3\2\2\2fg\3\2\2\2gh\7\24\2\2h\27\3\2\2\2il\5\32\16\2jl\5\34\17\2ki"+
-		"\3\2\2\2kj\3\2\2\2l\31\3\2\2\2mo\7\b\2\2nm\3\2\2\2no\3\2\2\2op\3\2\2\2"+
-		"pq\7\22\2\2q\33\3\2\2\2rt\7\b\2\2sr\3\2\2\2st\3\2\2\2tu\3\2\2\2uv\7\33"+
-		"\2\2v\35\3\2\2\2wy\7$\2\2xw\3\2\2\2yz\3\2\2\2zx\3\2\2\2z{\3\2\2\2{\37"+
-		"\3\2\2\2\21*.\61>KOSY^beknsz";
+		"\3\6\3\7\3\7\3\b\3\b\3\b\3\b\3\b\5\b@\n\b\3\b\3\b\3\t\3\t\3\t\3\t\3\t"+
+		"\3\t\3\t\3\t\3\t\5\tM\n\t\3\t\3\t\5\tQ\n\t\3\t\3\t\5\tU\n\t\3\n\3\n\3"+
+		"\n\3\n\5\n[\n\n\3\13\3\13\3\13\5\13`\n\13\3\13\3\13\5\13d\n\13\3\f\5\f"+
+		"g\n\f\3\f\3\f\3\r\3\r\5\rm\n\r\3\16\5\16p\n\16\3\16\3\16\3\17\5\17u\n"+
+		"\17\3\17\3\17\3\20\6\20z\n\20\r\20\16\20{\3\20\2\2\21\2\4\6\b\n\f\16\20"+
+		"\22\24\26\30\32\34\36\2\6\4\2\21\21  \4\2\r\r\17\17\t\2\t\t\13\13\25\25"+
+		"\27\27\32\32\37\37\"\"\3\2\4\6\u0087\2 \3\2\2\2\4*\3\2\2\2\6.\3\2\2\2"+
+		"\b\61\3\2\2\2\n\65\3\2\2\2\f8\3\2\2\2\16?\3\2\2\2\20T\3\2\2\2\22V\3\2"+
+		"\2\2\24\\\3\2\2\2\26f\3\2\2\2\30l\3\2\2\2\32o\3\2\2\2\34t\3\2\2\2\36y"+
+		"\3\2\2\2 !\5\4\3\2!\"\7\2\2\3\"\3\3\2\2\2#+\5\6\4\2$+\5\16\b\2%+\5\20"+
+		"\t\2&+\5\22\n\2\'+\5\24\13\2(+\5\26\f\2)+\5\30\r\2*#\3\2\2\2*$\3\2\2\2"+
+		"*%\3\2\2\2*&\3\2\2\2*\'\3\2\2\2*(\3\2\2\2*)\3\2\2\2+\5\3\2\2\2,/\5\b\5"+
+		"\2-/\5\n\6\2.,\3\2\2\2.-\3\2\2\2/\7\3\2\2\2\60\62\t\2\2\2\61\60\3\2\2"+
+		"\2\61\62\3\2\2\2\62\63\3\2\2\2\63\64\5\f\7\2\64\t\3\2\2\2\65\66\t\3\2"+
+		"\2\66\67\5\36\20\2\67\13\3\2\2\289\t\4\2\29\r\3\2\2\2:;\7\26\2\2;@\7\3"+
+		"\2\2<@\7\23\2\2=@\7\16\2\2>@\7\30\2\2?:\3\2\2\2?<\3\2\2\2?=\3\2\2\2?>"+
+		"\3\2\2\2@A\3\2\2\2AB\5\36\20\2B\17\3\2\2\2CD\7\35\2\2DU\5\36\20\2EF\7"+
+		"\31\2\2FG\7\37\2\2GU\5\36\20\2HI\7\34\2\2IU\5\36\20\2JL\7\n\2\2KM\t\5"+
+		"\2\2LK\3\2\2\2LM\3\2\2\2MN\3\2\2\2NP\5\36\20\2OQ\7#\2\2PO\3\2\2\2PQ\3"+
+		"\2\2\2QU\3\2\2\2RS\7\f\2\2SU\5\36\20\2TC\3\2\2\2TE\3\2\2\2TH\3\2\2\2T"+
+		"J\3\2\2\2TR\3\2\2\2U\21\3\2\2\2VW\7\7\2\2WZ\5\36\20\2XY\7!\2\2Y[\5\36"+
+		"\20\2ZX\3\2\2\2Z[\3\2\2\2[\23\3\2\2\2\\]\7\20\2\2]_\5\36\20\2^`\t\5\2"+
+		"\2_^\3\2\2\2_`\3\2\2\2`a\3\2\2\2ac\5\36\20\2bd\7#\2\2cb\3\2\2\2cd\3\2"+
+		"\2\2d\25\3\2\2\2eg\7\30\2\2fe\3\2\2\2fg\3\2\2\2gh\3\2\2\2hi\7\24\2\2i"+
+		"\27\3\2\2\2jm\5\32\16\2km\5\34\17\2lj\3\2\2\2lk\3\2\2\2m\31\3\2\2\2np"+
+		"\7\b\2\2on\3\2\2\2op\3\2\2\2pq\3\2\2\2qr\7\22\2\2r\33\3\2\2\2su\7\b\2"+
+		"\2ts\3\2\2\2tu\3\2\2\2uv\3\2\2\2vw\7\33\2\2w\35\3\2\2\2xz\7$\2\2yx\3\2"+
+		"\2\2z{\3\2\2\2{y\3\2\2\2{|\3\2\2\2|\37\3\2\2\2\21*.\61?LPTZ_cflot{";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {

@@ -2,10 +2,15 @@ package server;
 
 import antlr.CommandLexer;
 import antlr.CommandParser;
-import core.MessageType;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.BufferedTokenStream;
-import server.messages.*;
+import server.messages.CommandMessage;
+import server.messages.ErrorMessage;
+import server.messages.GameMessage;
+import server.messages.LoginMessage;
+import state.CommandRunner;
+import state.Game;
+import state.Player;
 
 import javax.websocket.*;
 import javax.websocket.server.PathParam;
@@ -15,53 +20,49 @@ import java.util.Collections;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.CopyOnWriteArraySet;
 
 @ServerEndpoint(value = "/game/{lobby}", decoders = GameDecoder.class, encoders = GameEncoder.class)
 public class GameWebSocket {
     private static final Set<Session> EMPTY_LOBBY = Collections.emptySet();
-    private static final ConcurrentMap<String, Set<Session>> lobbies = new ConcurrentHashMap<>();
+    private static final ConcurrentMap<String, Game> lobbies = new ConcurrentHashMap<>();
 
     @OnOpen
     public void onOpen(final Session player, @PathParam("lobby") final String lobby) {
-        lobbies.computeIfAbsent(lobby, s -> new CopyOnWriteArraySet<>()).add(player);
+        lobbies.computeIfAbsent(lobby, s -> new Game());
     }
 
     @OnMessage
-    public void onMessage(GameMessage message, Session player, @PathParam("lobby") String lobby) {
+    public void onMessage(GameMessage message, Session playerSession, @PathParam("lobby") String lobby) {
         try {
+            Game currentGame = lobbies.get(lobby);
+
             if (message instanceof LoginMessage) {
-                if(isLoggedIn(player)) {
-                    player.getBasicRemote().sendObject(new ErrorMessage("already logged in"));
+                if (isLoggedIn(playerSession)) {
+                    playerSession.getBasicRemote().sendObject(new ErrorMessage("already logged in"));
                     return;
                 }
 
                 String possibleName = message.argument();
-                for (Session peer : lobbies.getOrDefault(lobby, EMPTY_LOBBY))
-                    if (possibleName.equals(peer.getUserProperties().getOrDefault("name", ""))) {
-                        player.getBasicRemote().sendObject(new ErrorMessage(possibleName + " is already taken."));
-                        return;
-                    }
+                boolean success = currentGame.addPlayer(possibleName, playerSession);
 
-                player.getUserProperties().put("name", possibleName);
-                player.getBasicRemote().sendObject(new UpdateMessage("You have logged in as " + possibleName + "!", MessageType.Notification));
+                if (!success)
+                    playerSession.getBasicRemote().sendObject(new ErrorMessage(possibleName + " is already taken."));
+            } else if (isLoggedIn(playerSession) && message instanceof CommandMessage) {
+                Player player = (Player) playerSession.getUserProperties().get("player");
 
-                // Should add the player to the right game
-                // and update him about his location
-            } else if (isLoggedIn(player) && message instanceof CommandMessage) {
                 CommandLexer lexer = new CommandLexer(new ANTLRInputStream(message.argument()));
                 CommandParser parser = new CommandParser(new BufferedTokenStream(lexer));
                 CommandParser.CommandContext parsedCommand = parser.command();
 
                 if (parser.getNumberOfSyntaxErrors() != 0) {
                     String error = String.format("Unknown command '%s'", message.argument());
-                    player.getBasicRemote().sendObject(new ErrorMessage(error));
+                    playerSession.getBasicRemote().sendObject(new ErrorMessage(error));
                     return;
                 }
 
-                player.getBasicRemote().sendObject(new UpdateMessage("Parsed successfully!", MessageType.Notification));
+                CommandRunner.execute(currentGame, player, parsedCommand);
             } else {
-                player.getBasicRemote().sendObject(new ErrorMessage("[FATAL] Invalid message sent to server"));
+                playerSession.getBasicRemote().sendObject(new ErrorMessage("[FATAL] Invalid message sent to server"));
             }
         } catch (EncodeException | IOException e) {
             System.out.println(e.getMessage());
@@ -69,11 +70,12 @@ public class GameWebSocket {
     }
 
     private boolean isLoggedIn(Session player) {
-        return player.getUserProperties().containsKey("name");
+        return player.getUserProperties().containsKey("player");
     }
 
     @OnClose
     public void onClose(Session player, @PathParam("lobby") String lobby) {
-        lobbies.getOrDefault(lobby, EMPTY_LOBBY).remove(player);
+        if (isLoggedIn(player))
+            lobbies.get(lobby).killPlayer((Player) player.getUserProperties().get("player"));
     }
 }

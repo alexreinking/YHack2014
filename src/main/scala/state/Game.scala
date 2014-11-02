@@ -1,10 +1,13 @@
 package state;
 
-import location.Location;
+import location.{Room, Location}
+;
+import javax.websocket.Session;
+import scala.util.Random;
 import utils.OptionUtils.optional2Option;
 
 class Game {
-  private val worldMap = initializeRooms;
+  private val (worldMap, startingLocations) = initializeMap;
   private val playerLocations =
     scala.collection.mutable.Map.empty[Player, Location];
   private val foeLocations =
@@ -12,15 +15,50 @@ class Game {
 
   def killPlayer(player: Player) {
     playerLocations.get(player).flatMap(worldMap.get).foreach(_.remove(player));
+    playerLocations.remove(player);
   }
 
   def killFoe(foe: Foe) {
     foeLocations.get(foe).flatMap(worldMap.get).foreach(_.remove(foe));
+    foeLocations.remove(foe);
   }
 
-  private def initializeRooms: Map[Location, LocationState] = {
-    // initialize the dungeon's rooms here.
-    Map.empty[Location, LocationState];
+  def addPlayer(name: String, session: Session): Boolean = {
+    if (playerLocations.keySet.exists(_.name == name)) {
+      return false;
+    }
+
+    val startingLocation = startingLocations(Random.nextInt(startingLocations.size));
+    val player = new Player(name, session, this);
+    session.getUserProperties.put("player", player);
+
+    playerLocations.put(player, startingLocation);
+    worldMap.get(startingLocation).foreach(_.add(player));
+    // tell the player the description
+    player.notify(startingLocation.getDescription)
+
+    return true;
+  }
+
+  private def initializeMap: (Map[Location, LocationState], List[Location]) = {
+    // This should be changed to generate maps we actually want...
+    val start1 = new Room("start room 1", "The first starting room");
+    val start2 = new Room("start room 2", "The more evil starting room");
+    val camelot = new Room("Camelot", "Tis a silly place");
+    val foo = new Room("foo", "This is the palace of foo");
+    val clam = new Room("drunken clam", "Giggity");
+    val bar = new Room("bar", "Tis the bar");
+
+    start1.setEast(camelot);
+    start1.setSouth(foo);
+    start2.setNorth(foo);
+    foo.setWest(bar);
+    bar.setWest(clam);
+    clam.setWest(foo);
+
+    val startingLocations = List(start1, start2);
+    val allLocations = startingLocations ++: List(camelot, foo, clam, bar);
+    return (allLocations.map(loc => (loc, new LocationState())).toMap, startingLocations);
   }
 
   def move(player: Player, direction: String) {
@@ -34,6 +72,7 @@ class Game {
       oldState.remove(player);
       newState.add(player);
       playerLocations.put(player, newLocation);
+      player.notify(newLocation.getDescription)
     }
   }
 
