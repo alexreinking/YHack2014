@@ -24,7 +24,9 @@ $(function () {
     var requestMade = false;
     var lastCommand = "";
 
-    log = function (level, message) { $log.append($("<div class='log-line log-" + level + "'>").text(message)); }
+    log = function (level, message) {
+        $log.append($("<div class='log-line log-" + level + "'>").text(message));
+    }
 
     wsocket = new WebSocket('ws://' + document.location.host + document.location.pathname + 'game/global');
 
@@ -49,8 +51,14 @@ $(function () {
 
     $command.keyup(function (e) {
         if (e.keyCode === 13) {
-            if (requestMade) {
-                var selection = parseInt($command.val());
+            var inputLine = $command.val().trim();
+            if (inputLine.length === 0){
+                // do nothing
+            } else if (inputLine === "help") {
+                if (window.location.hash !== "#commands")
+                    loadPage("commands");
+            } else if (requestMade) {
+                var selection = parseInt(inputLine);
                 if (!isNaN(selection)) {
                     var data = JSON.stringify({ cmd: lastCommand + " " + (selection - 1) });
                     wsocket.send(data);
@@ -59,10 +67,10 @@ $(function () {
                     log('Fatal', 'You must enter a number');
                 }
             } else if (loggedIn) {
-                lastCommand = $command.val();
-                wsocket.send(JSON.stringify({ cmd: $command.val() }));
+                lastCommand = inputLine;
+                wsocket.send(JSON.stringify({ cmd: inputLine }));
             } else {
-                wsocket.send(JSON.stringify({ login: $command.val() }));
+                wsocket.send(JSON.stringify({ login: inputLine }));
             }
 
             $command.val("");
